@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Civic Dashboard
+Comment=Open the Civic infotainment dashboard in Chromium kiosk mode
+Exec=sh -c "exec sh \"$HOME/civic-dashboard/scripts/launch-kiosk.sh\""
+Terminal=false
+X-GNOME-Autostart-enabled=true

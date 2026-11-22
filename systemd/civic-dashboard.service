@@ -1,0 +1,15 @@
+# User service. Assumes this project is installed at ~/civic-dashboard.
+[Unit]
+Description=Civic dashboard local server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/civic-dashboard
+ExecStart=%h/civic-dashboard/.venv/bin/python %h/civic-dashboard/app.py
+Environment=CIVIC_HOST=127.0.0.1
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target
