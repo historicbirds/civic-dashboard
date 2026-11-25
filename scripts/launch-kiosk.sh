@@ -25,4 +25,10 @@ else
     echo 'Install Chromium before starting the kiosk.' >&2
     exit 1
 fi
-exec "$BROWSER_BIN" --kiosk --no-first-run --no-default-browser-check --disable-session-crashed-bubble "$DASHBOARD_URL"
+if [ -n "${WAYLAND_DISPLAY:-}" ]; then
+    set -- --ozone-platform=wayland
+else
+    set --
+fi
+# Retain this Pi's existing kiosk password-store setting.
+exec "$BROWSER_BIN" "$@" --kiosk --password-store=basic --no-first-run --no-default-browser-check --disable-session-crashed-bubble --autoplay-policy=no-user-gesture-required "$DASHBOARD_URL"

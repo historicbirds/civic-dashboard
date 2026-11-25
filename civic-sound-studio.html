@@ -20,6 +20,16 @@
 .sub-label{left:34%;width:32%;min-height:36px}.sub-label strong,.sub-label>span:last-child{font-size:12px}
 @media(min-width:851px) and (min-height:681px) and (max-height:799px){.detail-panel{padding:18px 22px 12px}.detail-panel .control-heading{margin-top:12px}.speaker-actions{margin:10px 0}.routing-note{font-size:11px;line-height:1.5;margin-top:8px}}
 @media(min-width:851px) and (min-height:681px) and (max-height:799px){.amp-panel{flex:0 0 84px;height:84px;padding:10px 18px 8px}.amp-panel>p{font-size:11px;margin:4px 0}.routing-link{min-height:22px;padding:2px 0}}
+
+/* Keep the player within the head unit's visible HDMI area. */
+:root{--screen-inset:8px}body{padding:var(--screen-inset);overflow:hidden}.app-shell{min-height:calc(100dvh - 2*var(--screen-inset))}.rail,main{height:calc(100dvh - 2*var(--screen-inset))}.rail{top:var(--screen-inset)}.bluetooth-actions{display:flex;gap:10px}.bluetooth-actions button{flex:1;min-height:48px}.source-state.is-live{color:var(--green)}.phone-alternatives .text-btn+.text-btn{margin-left:20px}@media(max-width:850px){body{overflow:auto}.rail{top:var(--screen-inset)}main{height:auto;min-height:calc(100dvh - 2*var(--screen-inset))}}
+
+.obd-heading{padding-top:12px;padding-bottom:16px}.obd-toolbar{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}.obd-tabs{display:flex;gap:8px}.obd-tabs .active{background:#233a5d;border-color:#398bff88}.obd-toolbar button{min-height:46px;font-size:16px}.obd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.obd-reading{padding:17px 22px;min-height:118px}.obd-reading>span{font-size:17px;color:var(--muted)}.obd-reading strong{display:block;font-size:36px;line-height:1.15;margin-top:10px;font-weight:550;font-variant-numeric:tabular-nums}.obd-reading strong b{font-weight:550}.obd-reading small{font-size:18px;color:var(--muted);font-weight:400}.obd-reading p{font-size:12px;color:var(--muted);margin-top:5px}.obd-primary strong{font-size:43px}.obd-reading.unavailable strong{color:var(--muted)}.obd-footer{margin-top:14px;font-size:14px;line-height:1.5;color:var(--muted)}.obd-footer>p{color:var(--text);margin-bottom:5px}.obd-footer>div{display:flex;justify-content:space-between;gap:12px;font-size:12px}.obd-live{color:var(--green);border-color:#25c47766}.obd-extra{grid-template-columns:repeat(2,minmax(0,1fr))}.obd-codes{padding:22px;min-height:240px}.obd-codes .control-heading{gap:20px}.obd-codes h3{font-size:20px}.obd-code{display:flex;align-items:center;gap:20px;padding:16px 0;border-bottom:1px solid var(--border)}.obd-code strong{font-size:25px;color:#8dbaff}.obd-code p{font-size:16px;color:var(--text)}#obd-code-list{max-height:200px;overflow:auto}@media(max-width:850px){.obd-grid{grid-template-columns:1fr 1fr}.obd-toolbar{flex-wrap:wrap}.obd-tabs{flex-wrap:wrap}.obd-footer>div{flex-wrap:wrap}}
+
+/* Hardware lighting controls retain the 720p kiosk control scale. */
+.lights-heading{padding-top:12px;padding-bottom:18px}#light-controls{border:0;padding:0;margin:0;min-width:0}#light-controls:disabled .lights-grid{opacity:.5}.lights-grid{display:grid;grid-template-columns:1.12fr 1fr;gap:18px}.lights-grid>.panel{padding:22px;min-height:340px}.lights-grid .control-heading{gap:12px;margin-bottom:20px}.light-color-reading{display:flex;align-items:center;gap:10px;font-size:16px;font-variant-numeric:tabular-nums}.light-color-reading>i{width:26px;height:26px;background:#263449;border-radius:50%;box-shadow:0 0 18px #398bff33}.light-custom{position:relative;background:var(--button);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer}.light-custom input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}.light-presets{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:14px 0 22px}.light-presets button{height:49px;border-radius:13px;background:color-mix(in srgb,var(--color) 22%,#111b2a);border:1px solid color-mix(in srgb,var(--color) 65%,#263449);position:relative}.light-presets button::after{content:"";position:absolute;width:23px;height:23px;background:var(--color);border-radius:50%;top:12px;left:calc(50% - 11.5px)}.light-modes{display:flex;gap:10px}.light-modes button{flex:1;min-height:48px;font-size:18px}.light-modes button.active,.light-power button.active{background:#233e63;border-color:#398bff88}.light-power{display:flex;gap:8px}.light-power button{min-width:70px;min-height:45px;font-size:17px}.light-zone{margin:25px 0 16px}.light-zone>div{display:flex;justify-content:space-between;font-size:20px;margin-bottom:13px}.light-zone output{color:#9bc2ff}.light-zone .range{height:30px;width:100%}.light-note,.light-solid-note{font-size:13px;color:var(--muted);line-height:1.6}.light-solid-note{margin-top:24px}.light-response-row{display:grid;grid-template-columns:1fr 60px;gap:8px;font-size:15px;margin-top:16px}.light-response-row output{text-align:right;color:#9bc2ff}.light-response-row input{grid-column:1/-1;height:18px;width:100%}.light-bass-meter{height:5px;border-radius:6px;background:#263449;margin-top:18px;overflow:hidden}.light-bass-meter>i{display:block;height:100%;width:0;background:var(--blue);transition:width .12s linear}.light-footer{margin-top:18px;line-height:1.7;font-size:15px}.light-footer>span{color:var(--muted);font-size:13px}#light-response:not([hidden])~.light-solid-note{display:none}@media(max-width:850px){.lights-grid{grid-template-columns:1fr}.light-color-reading{font-size:14px}.lights-grid .control-heading{flex-wrap:wrap}}
+.light-response-row{grid-template-columns:120px minmax(0,1fr) 48px;align-items:center;gap:10px;margin-top:10px;min-height:32px}.light-response-row label{grid-column:1;grid-row:1}.light-response-row output{grid-column:3;grid-row:1}.light-response-row input{grid-column:2;grid-row:1;height:26px}.light-bass-meter{margin-top:12px}.light-presets{margin:10px 0 16px}.light-color-panel .control-heading{margin-bottom:14px}
+.track-entry{display:flex;align-items:center;gap:8px}.track-entry .track-row{flex:1;min-width:0}.track-entry .track-row strong{min-width:0}.delete-track,.danger-btn{border:1px solid #89484f;background:#43232d;color:#ffdce0;border-radius:10px;min-height:44px;padding:10px 15px;font-size:15px}.delete-track{flex-shrink:0;min-width:76px}#delete-music-dialog>p{margin-top:15px}#delete-music-name{font-size:22px;color:var(--text);overflow-wrap:anywhere}.delete-music-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:28px}.delete-music-actions button{min-height:48px;min-width:110px;font-size:18px}#delete-music-error{color:#ffb4bb;font-size:16px}
 </style></head>
 <body>
 <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
@@ -45,7 +55,7 @@
 <div class="app-shell">
 <aside class="rail"><button class="brand-button" data-page="home" aria-label="Honda home"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjYwIDAgMTU1IDEyMyI+PGcgZmlsbD0iI2U4ZWRmNSI+PHBhdGggZD0ibTE3Mi4xNzgxMzEsMTAuNTQ5OTk5Yy0zLjM5OTk5NCwxNS4yOTk5OTkgLTQuODAwMDAzLDIyLjQwMDAwMiAtNy41OTk5OTEsMzMuNDAwMDAyYy0yLjcwMDAxMiwxMC42MDAwMDIgLTQuODAwMDAzLDIwLjQ5OTk5NiAtOC40MDAwMDksMjUuMjk5OTk5Yy0zLjU5OTk5MSw0LjkwMDAwMiAtOC41LDUuOTAwMDAyIC0xMS44MDAwMDMsNi4zMDAwMDNjLTEuNjk5OTk3LDAuMTk5OTk3IC0zLDAuMjk5OTk1IC02LjY5OTk5NywwLjI5OTk5NWMtMy42OTk5OTcsMCAtNSwtMC4wOTk5OTggLTYuNjk5OTk3LC0wLjI5OTk5NWMtMy4zMDAwMDMsLTAuNDAwMDAyIC04LjE5OTk5NywtMS40MDAwMDIgLTExLjgwMDAwMywtNi4zMDAwMDNjLTMuNTk5OTkxLC00LjgwMDAwMyAtNS42OTk5OTcsLTE0LjY5OTk5NyAtOC4yOTk5OTUsLTI1LjI5OTk5OWMtMi44MDAwMDMsLTExLjEwMDAwMiAtNC4xOTk5OTcsLTE4LjEwMDAwMiAtNy41OTk5OTgsLTMzLjQwMDAwMmMwLDAgLTMuNDAwMDAyLDAuMSAtNC45MDAwMDIsMC4yMDAwMDFjLTIuMDk5OTk4LDAuMSAtMy42OTk5OTcsMC4yOTk5OTkgLTUuNDAwMDAyLDAuNWMwLDAgMiwzMS41IDIuOTAwMDAyLDQ0LjkwMDAwMmMwLjkwMDAwMiwxNCAyLjU5OTk5OCwzNy42OTk5OTcgNC4wOTk5OTgsNTUuNTk5OTk4YzAsMCAyLjkwMDAwMiwwLjUgNy43MDAwMDUsMC42OTk5OTdjNSwwLjMwMDAwMyA3LjI5OTk5NSwwLjMwMDAwMyA3LjI5OTk5NSwwLjMwMDAwM2MyLjEwMDAwNiwtNy45MDAwMDIgNC42MDAwMDYsLTE4LjgwMDAwMyA3LjUsLTIzLjVjMi4zOTk5OTQsLTMuODAwMDAzIDYsLTQuMTk5OTk3IDguMTAwMDA2LC00LjVjMy4xOTk5OTcsLTAuNDAwMDAyIDYsLTAuNSA3LjE5OTk5NywtMC41bDAsMGwwLDBjMS4zMDAwMDMsMCA0LDAgNy4xOTk5OTcsMC41YzIuMTAwMDA2LDAuMzAwMDAzIDUuNjk5OTk3LDAuNjk5OTk3IDguMTAwMDA2LDQuNWMyLjg5OTk5NCw0LjY5OTk5NyA1LjUsMTUuNTk5OTk4IDcuNSwyMy41YzAsMCAyLjE5OTk5NywwIDcuMTk5OTk3LC0wLjMwMDAwM2M0LjgwMDAwMywtMC4yOTk5OTUgNy42OTk5OTcsLTAuNjk5OTk3IDcuNjk5OTk3LC0wLjY5OTk5N2MxLjUsLTE3LjkwMDAwMiAzLjE5OTk5NywtNDEuNSA0LjEwMDAwNiwtNTUuNTk5OTk4YzAuODk5OTk0LC0xMy4zMDAwMDMgMi44OTk5OTQsLTQ0LjkwMDAwMiAyLjg5OTk5NCwtNDQuOTAwMDAyYy0xLjY5OTk5NywtMC4yMDAwMDEgLTMuMzk5OTk0LC0wLjQgLTUuMzk5OTk0LC0wLjVjLTEuNTAwMDE1LC0wLjEgLTQuOTAwMDA5LC0wLjIwMDAwMSAtNC45MDAwMDksLTAuMjAwMDAxIi8+PHBhdGggZD0ibTIxMS44NzgxMjgsMjkuMTUwMDAyYy0yLC0yMC4wMDAwMDIgLTE1LjQwMDAwOSwtMjQuMjAwMDAxIC0yNy4xMDAwMDYsLTI2LjIwMDAwMmMtNS44OTk5OTQsLTEgLTE2LjM5OTk5NCwtMS44IC0yMy4wOTk5OTEsLTIuMDk5OTk5Yy01LjkwMDAwOSwtMC40MDAwMDEgLTE5LjcwMDAxMiwtMC42IC0yMy45MDAwMDksLTAuNnMtMTgsMC4yIC0yMy44OTk5OTQsMC42Yy02LjcwMDAwNSwwLjI5OTk5OSAtMTcuMjAwMDA1LDEuMDk5OTk5IC0yMy4xMDAwMDYsMi4wOTk5OTljLTExLjY5OTk5NywyLjAwMDAwMSAtMjUuMDk5OTk4LDYuMiAtMjcuMDk5OTk4LDI2LjIwMDAwMmMtMC41OTk5OTgsNS41IC0wLjY5OTk5NywxMi41OTk5OTggLTAuNTk5OTk4LDIwLjE5OTk5N2MwLjE5OTk5NywxMi43MDAwMDUgMS4zMDAwMDMsMjEuMjAwMDA1IDEuOTAwMDAyLDI3LjIwMDAwNWMwLjQwMDAwMiw0LjA5OTk5OCAyLjA5OTk5OCwxNi4yOTk5OTUgNC4yOTk5OTUsMjIuNTk5OTk4YzMsOC42OTk5OTcgNS43MDAwMDUsMTEuMTk5OTk3IDguOTAwMDAyLDEzLjc5OTk5NWM1LjgwMDAwMyw0LjY5OTk5NyAxNS40MDAwMDIsNi4xOTk5OTcgMTcuNDAwMDAyLDYuNjAwMDA2YzEwLjgwMDAwMywxLjg5OTk5NCAzMi42MDAwMDYsMi4zMDAwMDMgNDIuMzAwMDAzLDIuMzAwMDAzYzkuNTk5OTkxLDAgMzEuNSwtMC4zMDAwMDMgNDIuMzAwMDAzLC0yLjMwMDAwM2MyLC0wLjQwMDAwOSAxMS41OTk5OTEsLTEuODAwMDAzIDE3LjM5OTk5NCwtNi42MDAwMDZjMy4xOTk5OTcsLTIuNTk5OTk4IDUuODk5OTk0LC01LjA5OTk5OCA4Ljg5OTk5NCwtMTMuNzk5OTk1YzIuMjAwMDEyLC02LjMwMDAwMyAzLjkwMDAwOSwtMTguNTk5OTk4IDQuMzAwMDAzLC0yMi41OTk5OThjMC42MDAwMDYsLTUuOTAwMDAyIDEuNjk5OTk3LC0xNC41IDEuOTAwMDA5LC0yNy4yMDAwMDVjLTAuMTAwMDA2LC03LjY5OTk5NyAtMC4zMDAwMDMsLTE0Ljc5OTk5OSAtMC44MDAwMDMsLTIwLjE5OTk5N20tNy40MDAwMDksMzMuNTk5OTk4Yy0xLjE5OTk5NywxNiAtMi42MDAwMDYsMjUuNTk5OTk4IC00LjYwMDAwNiwzMi41Yy0xLjgwMDAwMyw2LjA5OTk5OCAtNCwxMC4wOTk5OTggLTcuMTk5OTk3LDEzYy01LjM5OTk5NCw0LjkwMDAwMiAtMTIuODAwMDAzLDUuOTAwMDAyIC0xNy4xOTk5OTcsNi41OTk5OThjLTkuNDAwMDA5LDEuNDAwMDAyIC0yNS4zMDAwMDMsMS45MDAwMDIgLTM3LjY5OTk5NywxLjkwMDAwMmMtMTIuNSwwIC0yOC4zMDAwMTEsLTAuNSAtMzcuNzAwMDA1LC0xLjkwMDAwMmMtNC40MDAwMDIsLTAuNjk5OTk3IC0xMS44MDAwMDMsLTEuNjk5OTk3IC0xNy4yMDAwMDUsLTYuNTk5OTk4Yy0zLjE5OTk5NywtMi45MDAwMDIgLTUuNDAwMDAyLC03IC03LjE5OTk5NywtMTNjLTIsLTYuOTAwMDAyIC0zLjUsLTE2LjUgLTQuNTk5OTk4LC0zMi41Yy0wLjcwMDAwNSwtOS41OTk5OTggLTAuNjAwMDA2LC0yNS4yMDAwMDEgMC41LC0zMy41OTk5OThjMS41MDAwMDgsLTEyLjYwMDAwMiA3LjcwMDAwNSwtMTguOTAwMDAyIDIxLjAwMDAwOCwtMjEuMjAwMDAxYzYuMTk5OTk3LC0xLjEgMTQuNTk5OTk4LC0xLjkwMDAwMiAyMi41LC0yLjMwMDAwMWM2LjM5OTk5NCwtMC40IDE2LjgwMDAwMywtMC42IDIyLjY5OTk5NywtMC42YzUuODAwMDAzLC0wLjA5OTk5OCAxNi4zMDAwMDMsMC4yMDAwMDEgMjIuNjAwMDA2LDAuNmM3Ljg5OTk5NCwwLjQgMTYuMzAwMDAzLDEuMjAwMDAxIDIyLjUsMi4zMDAwMDFjMTMuMzAwMDAzLDIuNCAxOS41LDguNjk5OTk5IDIxLjA5OTk5MSwyMS4yMDAwMDFjMS4xMDAwMDYsOC4yOTk5OTkgMS4yMDAwMTIsMjMuOTAwMDAyIDAuNSwzMy41OTk5OTgiLz48L2c+PC9zdmc+" alt="Honda"></button><nav aria-label="Main navigation">
 <button class="nav-btn" data-page="home"><svg><use href="#home-icon"/></svg><span>Home</span></button><button class="nav-btn" data-page="music"><svg><use href="#music-icon"/></svg><span>Music</span></button><button class="nav-btn active" data-page="sound" aria-current="page"><svg><use href="#sound-icon"/></svg><span>Sound</span></button><button class="nav-btn" data-page="lights"><svg><use href="#lights-icon"/></svg><span>Lights</span></button><button class="nav-btn" data-page="vehicle"><svg><use href="#vehicle-icon"/></svg><span>Vehicle</span></button><button class="nav-btn" data-page="apps"><svg><use href="#apps-icon"/></svg><span>Apps</span></button></nav><div class="rail-foot"><img src="data:image/png;base64,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" alt="Raspberry Pi" title="Runs on Raspberry Pi 4"></div></aside>
-<main><header class="topbar"><div><span class="eyebrow">AUDIO SYSTEM</span><h1 id="page-title">Sound studio</h1></div><div class="header-right"><span class="connection">HDMI <span>STEREO</span></span><i class="header-divider"></i><time id="clock">--:--</time></div></header>
+<main><header class="topbar"><div><span class="eyebrow">AUDIO SYSTEM</span><h1 id="page-title">Sound studio</h1></div><div class="header-right"><span class="connection">HDMI <span id="output-source">LOCAL</span></span><i class="header-divider"></i><time id="clock">--:--</time></div></header>
 <section id="sound" class="page active"><div class="studio-toolbar"><div class="tabs" role="tablist" aria-label="Sound controls"><button class="tab active" data-tab="speakers" role="tab" id="tab-speakers" aria-selected="true" aria-controls="speakers">Speakers</button><button class="tab" data-tab="eq" role="tab" id="tab-eq" aria-selected="false" aria-controls="eq">31-band EQ</button><button class="tab" data-tab="stage" role="tab" id="tab-stage" aria-selected="false" aria-controls="stage">Sound stage</button><button class="tab" data-tab="routing" role="tab" id="tab-routing" aria-selected="false" aria-controls="routing">Signal path</button></div><button id="save-profile" class="profile-btn"><svg><use href="#check-icon"/></svg><span id="profile-status">Save tuning</span></button></div>
 <div class="tab-content active speaker-layout" id="speakers" role="tabpanel" aria-labelledby="tab-speakers">
 <article class="panel car-panel"><div class="panel-heading"><h2>Speaker layout</h2><span class="count-badge">7 speakers</span></div><div class="vehicle-map"><span class="front-label">FRONT OF VEHICLE</span>
@@ -71,21 +81,52 @@
 <div id="speaker-labels"></div></div><div class="map-footer"><span><i class="legend-dot"></i>Select a speaker to tune</span><span>2011 Civic EX coupe · R18 / 5MT</span></div></article>
 <div class="tuning-column"><article class="panel detail-panel"><div class="selected-heading"><div class="selected-icon"><svg><use href="#speaker-icon"/></svg></div><div><span class="eyebrow" id="speaker-position">FRONT LEFT · SAIL PANEL</span><h2 id="speaker-name">Rockford Fosgate</h2><p id="speaker-model">P165-SI · 1″ PEI tweeter</p></div><span id="channel-chip" hidden>L</span></div><div class="control-heading"><span>Level</span><span class="small-tag" id="band-tag">TREBLE · LEFT</span></div><div class="gain-control"><button class="step-btn" id="gain-down" aria-label="Reduce band level">−</button><div class="gain-display"><output id="gain-value">0.0</output><span>dB</span></div><button class="step-btn" id="gain-up" aria-label="Increase band level">+</button></div><input class="range" id="speaker-gain" type="range" min="-24" max="0" step="0.5" value="0" aria-label="Selected frequency band level"><div class="range-labels"><span>−24 dB</span><span>0 dB</span></div><div class="speaker-actions"><button class="outline-btn" id="cut-band" aria-pressed="false">Cut band</button><button class="outline-btn" id="audition-band" aria-pressed="false"><svg><use href="#wave-icon"/></svg>Audition band</button></div><div class="crossover-row"><div><span class="eyebrow">SOURCE BAND</span><strong id="frequency-region">3.5 kHz and up</strong></div><span id="slope-label">12 dB/oct · LR2</span><svg class="filter-curve" viewBox="0 0 85 35" aria-hidden="true"><path d="M2 32h81M2 16h81"/><path id="curve-line" d="M3 29Q25 29 38 16T81 4"/></svg></div><p class="routing-note" id="routing-note">Left-channel treble trim. Also affects the left rear coaxial.</p></article>
 <article class="panel amp-panel"><div class="amp-heading"><svg><use href="#sound-icon"/></svg><span id="amp-name">R2-200X2</span><span class="amp-label" id="amp-location">TRUNK · LEFT RACK</span></div><p id="amp-description">Front components · passive crossover at ~3.5 kHz</p><button id="routing-info" class="routing-link" aria-label="View signal routing">View signal path</button></article></div></div>
-<div class="tab-content" id="eq" role="tabpanel" aria-labelledby="tab-eq" hidden><div class="section-heading"><div><span class="eyebrow">EQUALIZER</span><h2>Graphic equalizer</h2></div><div class="button-row"><select id="eq-preset" aria-label="Equalizer preset"><option value="custom">Custom</option><option value="flat">Flat</option><option value="warm">Warm</option><option value="vocal">Vocal</option><option value="night">Night drive</option></select><button class="outline-btn" id="eq-bypass" aria-pressed="false">Bypass EQ</button></div></div><div class="panel eq-summary"><div><span class="eyebrow">SELECTED BAND</span><strong id="eq-selected">1 kHz</strong></div><div class="eq-adjust"><button class="step-btn" id="eq-down" aria-label="Reduce EQ band">−</button><output id="eq-value">0.0 dB</output><button class="step-btn" id="eq-up" aria-label="Increase EQ band">+</button></div><p>Scroll sideways for all 31 bands.<br>Select a band. Fine-tune with − / +.</p></div><div class="panel eq-panel"><div class="eq-axis"><span>+12</span><span>0 dB</span><span>−12</span></div><div class="eq-scroll"><div class="eq-bands" id="eq-bands"></div></div></div><div class="eq-bottom"><span>20 Hz — 20 kHz · ±12 dB · stereo linked</span><span>−12 dB processing headroom + peak guard</span></div></div>
+<div class="tab-content" id="eq" role="tabpanel" aria-labelledby="tab-eq" hidden><div class="section-heading"><div><span class="eyebrow">EQUALIZER</span><h2>Graphic equalizer</h2></div><div class="button-row"><select id="eq-preset" aria-label="Equalizer preset"><option value="custom">Custom</option><option value="flat">Flat</option><option value="warm">Warm</option><option value="vocal">Vocal</option><option value="night">Night drive</option></select><button class="outline-btn" id="eq-bypass" aria-pressed="false">Bypass EQ</button></div></div><div class="panel eq-summary"><div><span class="eyebrow">SELECTED BAND</span><strong id="eq-selected">1 kHz</strong></div><div class="eq-adjust"><button class="step-btn" id="eq-down" aria-label="Reduce EQ band">−</button><output id="eq-value">0.0 dB</output><button class="step-btn" id="eq-up" aria-label="Increase EQ band">+</button></div><p>Scroll sideways for all 31 bands.<br>Select a band. Fine-tune with − / +.</p></div><div class="panel eq-panel"><div class="eq-axis"><span>+12</span><span>0 dB</span><span>−12</span></div><div class="eq-scroll"><div class="eq-bands" id="eq-bands"></div></div></div><div class="eq-bottom"><span>20 Hz — 20 kHz · ±12 dB · stereo linked</span><span id="eq-headroom">Auto headroom · peak guard</span></div></div>
 <div class="tab-content" id="stage" role="tabpanel" aria-labelledby="tab-stage" hidden><div class="section-heading"><div><span class="eyebrow">SOUND STAGE</span><h2>Stereo processing</h2></div><span class="count-badge">Live stereo DSP</span></div><div class="stage-grid"><article class="panel stage-card"><svg class="stage-art" viewBox="0 0 400 150" aria-hidden="true"><ellipse cx="200" cy="85" rx="145" ry="60" fill="#398bff0c"/><path d="M50 110Q200-20 350 110M90 120Q200 15 310 120M130 130Q200 55 270 130" fill="none" stroke="#398bff" stroke-width="2"/><circle cx="200" cy="119" r="9" fill="#e8edf5"/><text x="42" y="95">L</text><text x="348" y="95">R</text></svg><div class="control-heading"><h3>Stereo separation</h3><output id="width-value">100%</output></div><input class="range" id="stereo-width" type="range" min="0" max="150" step="5" value="100" aria-label="Stereo separation"><div class="range-labels"><span>Mono</span><span>Natural</span><span>Wide</span></div><p>Adjust width using mid / side processing.</p><button class="outline-btn" id="width-reset">Reset to natural</button></article><article class="panel stage-card"><span class="eyebrow">LISTENING POSITION</span><h2>Balance</h2><div class="balance-art"><span>L</span><div><i id="balance-marker"></i></div><span>R</span></div><div class="control-heading"><h3>Left / right balance</h3><output id="balance-value">Center</output></div><input class="range" id="balance" type="range" min="-100" max="100" step="5" value="0" aria-label="Stereo balance"><div class="range-labels"><span>Left</span><span>Center</span><span>Right</span></div><p>Attenuates the opposite channel without adding gain.</p><button class="outline-btn" id="balance-reset">Center balance</button></article></div></div>
-<div class="tab-content" id="routing" role="tabpanel" aria-labelledby="tab-routing" hidden><div class="section-heading"><div><span class="eyebrow">SYSTEM</span><h2>Audio routing</h2></div><span class="count-badge">2 channels · 7 drivers</span></div><div class="panel signal-chain"><span>Local music</span><b>›</b><span>31-band EQ</span><b>›</b><span>Width + L/R bands</span><b>›</b><span>Pi HDMI</span><b>›</b><span>DMX8710s</span></div><div class="hardware-grid"><article class="panel"><span class="eyebrow">FRONT COMPONENTS</span><h3>Rockford P165-SI</h3><p>2 × 1″ PEI tweeters<br>2 × 6.5″ door woofers</p><strong>R2-200X2 · left amp rack</strong><p>Integrated passive crossover<br>~3.5 kHz · ~12 dB/oct</p></article><article class="panel"><span class="eyebrow">LOW END</span><h3>Rockford R2D4</h3><p>10″ dual voice coil sub<br>Sealed trunk enclosure</p><strong>R2-250X1 · right amp rack</strong><p>Low-pass cutoff: 70 Hz<br>12 dB/oct · both channels</p></article><article class="panel"><span class="eyebrow">REAR FILL</span><h3>Kicker CS</h3><p>2 × 6.5″ coaxial speakers<br>Shared sub enclosure face</p><strong>Kenwood DMX8710s power</strong><p>Shares the front L/R source.<br>Separate level at the head unit.</p></article></div><p class="system-note">Trims shape shared HDMI frequency bands, not isolated speaker outputs. Kicker coaxials share the front L/R settings. Source bands use 12 dB/oct Linkwitz–Riley filters at 70 Hz and 3.5 kHz; hardware alignment is unverified. Phone audio will need system-level DSP; this sample processes local browser playback.</p></div></section>
+<div class="tab-content" id="routing" role="tabpanel" aria-labelledby="tab-routing" hidden><div class="section-heading"><div><span class="eyebrow">SYSTEM</span><h2>Audio routing</h2></div><span class="count-badge">2 channels · 7 drivers</span></div><div class="panel signal-chain"><span>Local / Bluetooth</span><b>›</b><span>31-band EQ</span><b>›</b><span>Width + L/R bands</span><b>›</b><span>Pi HDMI</span><b>›</b><span>DMX8710s</span></div><div class="hardware-grid"><article class="panel"><span class="eyebrow">FRONT COMPONENTS</span><h3>Rockford P165-SI</h3><p>2 × 1″ PEI tweeters<br>2 × 6.5″ door woofers</p><strong>R2-200X2 · left amp rack</strong><p>Integrated passive crossover<br>~3.5 kHz · ~12 dB/oct</p></article><article class="panel"><span class="eyebrow">LOW END</span><h3>Rockford R2D4</h3><p>10″ dual voice coil sub<br>Sealed trunk enclosure</p><strong>R2-250X1 · right amp rack</strong><p>Low-pass cutoff: 70 Hz<br>12 dB/oct · both channels</p></article><article class="panel"><span class="eyebrow">REAR FILL</span><h3>Kicker CS</h3><p>2 × 6.5″ coaxial speakers<br>Shared sub enclosure face</p><strong>Kenwood DMX8710s power</strong><p>Shares the front L/R source.<br>Separate level at the head unit.</p></article></div><p class="system-note">Trims shape shared HDMI frequency bands, not isolated speaker outputs. Kicker coaxials share the front L/R settings. Source bands use 12 dB/oct Linkwitz–Riley filters at 70 Hz and 3.5 kHz; hardware alignment is unverified. Local music and the Pi Bluetooth bridge enter the same DSP once. The visualizer measures processed output.</p></div></section>
 <section class="page" id="home" hidden><div class="section-heading"><div><span class="eyebrow">VEHICLE SYSTEMS</span><h2>Dashboard</h2></div><span class="count-badge">Raspberry Pi 4</span></div><div class="home-grid"><button class="home-tile" data-page="music"><svg><use href="#music-icon"/></svg><h2>Your music</h2><p>USB and onboard storage</p></button><button class="home-tile" data-page="sound"><svg><use href="#sound-icon"/></svg><h2>Sound studio</h2><p>Speaker levels and DSP</p></button><button class="home-tile" data-page="lights"><svg><use href="#lights-icon"/></svg><h2>Cabin lighting</h2><p>ATOTO CI-FLT01</p></button><button class="home-tile" data-page="phone"><svg><use href="#phone-icon"/></svg><h2>iPhone + Spotify</h2><p>Phone audio sources</p></button></div></section>
 <section class="page" id="music" hidden><div class="section-heading"><div><span class="eyebrow">LOCAL PLAYBACK</span><h2>Music library</h2></div><div class="button-row"><button class="outline-btn" data-page="phone"><svg><use href="#phone-icon"/></svg>iPhone</button><button class="outline-btn" id="scan-usb"><svg><use href="#folder-icon"/></svg>Scan USB</button><button class="primary-btn choose-files">Add music</button></div></div><div class="media-layout"><article class="panel now-playing"><div class="album-art"><div class="album-orbit"></div><span class="album-placeholder"><svg><use href="#music-icon"/></svg><b>No album artwork</b></span></div><h2 id="media-title">No track selected</h2><p id="media-subtitle">Choose music from USB or this device.</p><div class="onboard-controls"><button id="save-onboard" class="outline-btn" disabled>Save to Pi</button><span id="storage-caption">Save your tracks for playback without a USB drive</span></div></article><article class="panel library-panel"><div class="control-heading"><h3>Your library</h3><span id="track-count">0 tracks</span></div><input type="search" id="library-search" placeholder="Search your music" aria-label="Search music"><p id="usb-status" class="usb-status">Onboard and USB music load when you open Music.</p><div id="track-list"></div></article></div></section>
-<section class="page" id="phone" hidden><div class="section-heading"><div><span class="eyebrow">PHONE SOURCES</span><h2>iPhone 15 + Spotify</h2></div><span class="count-badge">Connection setup pending</span></div><div class="phone-grid"><article class="panel phone-card"><div class="phone-symbol"><svg><use href="#phone-icon"/></svg></div><span class="eyebrow">PREFERRED INPUT</span><h2>Bluetooth audio</h2><p>Play Spotify on your iPhone.<br>The Pi receives the audio and sends it to HDMI.</p><div class="source-state">Pi receiver not configured</div><button class="outline-btn" data-help="bluetooth">View connection plan</button></article><div class="phone-alternatives"><article class="panel"><span class="source-label">WI-FI</span><h3>Spotify Connect</h3><p>Control a compatible receiver from Spotify on your iPhone. Needs network access and Pi receiver software.</p><button class="text-btn" data-help="spotify">View setup requirements</button></article><article class="panel"><span class="source-label">USB-C</span><h3>Wired audio</h3><p>A charging cable alone is not a verified Pi audio input. Requires a compatible audio interface or capture path.</p><button class="text-btn" data-help="usb">View wired options</button></article></div></div><p class="system-note">Planned routing: iPhone → Pi receiver → system DSP → HDMI → Kenwood. Phone audio is not connected in this HTML sample.</p></section>
-<section class="page" id="lights" hidden><div class="section-heading"><div><span class="eyebrow">LIGHTING</span><h2>Lighting control</h2></div><span class="count-badge">Hardware not connected</span></div><article class="panel integration-panel"><svg><use href="#lights-icon"/></svg><h2>ATOTO CI-FLT01</h2><p>Color control and music-reactive lighting live here.<br>The Bluetooth adapter protocol needs integration.</p><div class="swatches"><i style="--swatch:#398bff"></i><i style="--swatch:#25c477"></i><i style="--swatch:#c075ff"></i><i style="--swatch:#ffaf62"></i></div><span class="muted">Interface preview · no lighting commands sent</span></article></section>
-<section class="page" id="vehicle" hidden><div class="section-heading"><div><span class="eyebrow">OBD2</span><h2>Vehicle diagnostics</h2></div><span class="count-badge">ELM327 not connected</span></div><div class="diagnostic-grid"><article class="panel"><span>Coolant temperature</span><strong>— <small>°F</small></strong></article><article class="panel"><span>Engine speed</span><strong>— <small>rpm</small></strong></article><article class="panel"><span>ECU voltage</span><strong>— <small>V</small></strong></article></div><p class="system-note">Live readings will appear after the Bluetooth ELM327 backend is connected.</p></section>
-<section class="page" id="apps" hidden><div class="section-heading"><div><span class="eyebrow">TOOLS</span><h2>Applications</h2></div></div><div class="home-grid"><button class="home-tile" data-page="visualizer"><svg><use href="#wave-icon"/></svg><h2>Visualizer</h2><p>Live audio analysis</p></button><button class="home-tile" data-page="phone"><svg><use href="#phone-icon"/></svg><h2>iPhone + Spotify</h2><p>Source connection plans.</p></button><button class="home-tile" id="fullscreen-btn"><svg><use href="#apps-icon"/></svg><h2>Full screen</h2><p>1280 × 720 kiosk display</p></button></div></section>
+<section class="page" id="phone" hidden><div class="section-heading"><div><span class="eyebrow">PHONE SOURCES</span><h2>iPhone + Spotify</h2></div><span class="count-badge" id="bluetooth-badge">Checking Bluetooth…</span></div><div class="phone-grid"><article class="panel phone-card"><div class="phone-symbol"><svg><use href="#phone-icon"/></svg></div><span class="eyebrow">BLUETOOTH INPUT</span><h2>Phone audio</h2><p>Play Spotify or other audio on your iPhone.<br>The same EQ, sound stage and visualizer apply.</p><div class="source-state" id="bluetooth-state" role="status">Checking Pi audio…</div><div class="bluetooth-actions"><button class="primary-btn" id="use-bluetooth" disabled>Use Bluetooth</button><button class="outline-btn" id="use-local">Local music</button></div></article><div class="phone-alternatives"><article class="panel"><span class="source-label">SIGNAL PATH</span><h3>One processing chain</h3><p>iPhone → Bluetooth input → 31-band EQ → source-band trims + stereo width → visualizer → HDMI.</p><p>Use Spotify on your iPhone for play, pause and track selection. Adjust the sound here.</p></article><article class="panel"><span class="source-label">WI-FI / USB</span><h3>Other connections</h3><p>Spotify Connect and wired iPhone capture still need separate setup.</p><button class="text-btn" data-help="spotify">Spotify Connect requirements</button><button class="text-btn" data-help="usb">Wired options</button></article></div></div><p class="system-note">Bluetooth processing runs on this Pi display. Keep the dashboard open. In local music mode, phone audio is held at the Bluetooth input to prevent a second unprocessed audio path.</p></section>
+<section class="page" id="lights" hidden><div class="section-heading lights-heading"><div><span class="eyebrow">ATOTO CI-FLT01</span><h2>Lighting control</h2></div><div class="button-row"><span class="count-badge" id="light-badge" role="status">Not connected</span><button class="outline-btn" id="light-reconnect">Reconnect</button></div></div><fieldset id="light-controls" disabled><div class="lights-grid"><article class="panel light-color-panel"><div class="control-heading"><h3>Cabin color</h3><div class="light-color-reading"><i id="light-preview"></i><span id="light-color-value">—</span><label class="light-custom" title="Choose custom color"><input id="light-color" type="color" value="#398bff" aria-label="Choose custom lighting color"><span>Choose</span></label></div></div><div class="light-presets"><button data-light-color="#FF0000" style="--color:#ff3434" aria-label="Red"></button><button data-light-color="#398BFF" style="--color:#398bff" aria-label="Blue"></button><button data-light-color="#25C477" style="--color:#25c477" aria-label="Green"></button><button data-light-color="#B060FF" style="--color:#b060ff" aria-label="Purple"></button><button data-light-color="#FF9830" style="--color:#ff9830" aria-label="Amber"></button><button data-light-color="#FFFFFF" style="--color:#ffffff" aria-label="White"></button></div><div class="light-modes"><button class="outline-btn active" data-light-mode="solid" aria-pressed="true">Solid</button><button class="outline-btn" data-light-mode="bass" aria-pressed="false">Bass pulse</button></div><div id="light-response" hidden><div class="light-response-row"><label for="light-sensitivity">Sensitivity</label><output id="light-sensitivity-value">0.6×</output><input class="range" id="light-sensitivity" type="range" min="0.1" max="2" step="0.1" value="0.6"></div><div class="light-response-row"><label for="light-strength">Pulse strength</label><output id="light-strength-value">90%</output><input class="range" id="light-strength" type="range" min="0" max="100" value="90"></div><div class="light-bass-meter"><i id="light-bass-fill"></i></div><p class="light-note">25–90 Hz · Processed music audio</p></div><p class="light-solid-note">Color applies to both front and rear zones.</p></article><article class="panel light-zone-panel"><div class="control-heading"><h3>Cabin zones</h3><div class="light-power"><button class="outline-btn" id="light-on" aria-pressed="false">On</button><button class="outline-btn" id="light-off" aria-pressed="false">Off</button></div></div><div class="light-zone"><div><label id="light-front-label" for="light-front">Front brightness</label><output id="light-front-value">—</output></div><input class="range" id="light-front" type="range" min="0" max="9" step="1" value="3"></div><div class="light-zone"><div><label id="light-rear-label" for="light-rear">Rear brightness</label><output id="light-rear-value">—</output></div><input class="range" id="light-rear" type="range" min="0" max="9" step="1" value="3"></div><p class="light-note">Nine brightness steps per zone. Bass pulse stays within these limits.</p></article></div></fieldset><div class="light-footer"><p id="light-message" role="status">Waiting for the light controller.</p><span id="light-detail">Power the ATOTO light controller to connect.</span></div></section>
+<section class="page" id="vehicle" hidden><div class="section-heading obd-heading"><div><span class="eyebrow">OBD2</span><h2>Vehicle diagnostics</h2></div><span class="count-badge" id="obd-badge" role="status">Not connected</span></div><div class="obd-toolbar"><div class="obd-tabs" aria-label="Diagnostics views"><button class="outline-btn active" data-obd-view="live" aria-pressed="true">Live data</button><button class="outline-btn" data-obd-view="sensors" aria-pressed="false">More sensors</button><button class="outline-btn" data-obd-view="codes" aria-pressed="false">Trouble codes</button></div><button class="outline-btn" id="obd-reconnect">Reconnect</button></div><div data-obd-panel="live" class="obd-grid"><article class="panel obd-reading obd-primary"><span>Engine speed</span><strong><b data-obd-value="rpm">—</b> <small>rpm</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading obd-primary"><span>Coolant temperature</span><strong><b data-obd-value="coolant">—</b> <small>°F</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading obd-primary"><span id=obd-voltage-label>ECU voltage</span><strong><b data-obd-value="voltage">—</b> <small>V</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Vehicle speed</span><strong><b data-obd-value="speed">—</b> <small>mph</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Engine load</span><strong><b data-obd-value="load">—</b> <small>%</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Throttle position</span><strong><b data-obd-value="throttle">—</b> <small>%</small></strong><p data-obd-detail>Awaiting connection</p></article></div><div data-obd-panel="sensors" class="obd-grid obd-extra" hidden><article class="panel obd-reading"><span>Intake air</span><strong><b data-obd-value="intake">—</b> <small>°F</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Manifold pressure</span><strong><b data-obd-value="map">—</b> <small>kPa</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Short-term fuel trim</span><strong><b data-obd-value="short_trim">—</b> <small>%</small></strong><p data-obd-detail>Awaiting connection</p></article><article class="panel obd-reading"><span>Long-term fuel trim</span><strong><b data-obd-value="long_trim">—</b> <small>%</small></strong><p data-obd-detail>Awaiting connection</p></article></div><div data-obd-panel="codes" class="panel obd-codes" hidden><div class="control-heading"><h3 id="obd-codes-state">Connect to the vehicle to read trouble codes.</h3><button class="outline-btn" id="obd-scan-codes" disabled>Scan codes</button></div><div id="obd-code-list"></div><p id="obd-code-age" class="system-note"></p><p class="system-note">Read-only scan. No trouble codes or readiness monitors are cleared.</p></div><div class="obd-footer"><p id="obd-message" role="status">Waiting for the ELM327 connection.</p><div><span id="obd-protocol">ELM327 · read-only</span><span id="obd-age">No vehicle readings yet</span></div></div></section>
+<section class="page" id="apps" hidden><div class="section-heading"><div><span class="eyebrow">TOOLS</span><h2>Applications</h2></div></div><div class="home-grid"><button class="home-tile" data-page="visualizer"><svg><use href="#wave-icon"/></svg><h2>Visualizer</h2><p>Live audio analysis</p></button><button class="home-tile" data-page="phone"><svg><use href="#phone-icon"/></svg><h2>iPhone + Spotify</h2><p>Bluetooth audio and setup</p></button><button class="home-tile" id="fullscreen-btn"><svg><use href="#apps-icon"/></svg><h2>Full screen</h2><p>1280 × 720 kiosk display</p></button></div></section>
 <section class="page" id="visualizer" hidden><div class="section-heading"><div><span class="eyebrow">LIVE AUDIO</span><h2>Audio analysis</h2></div><div class="button-row"><button class="outline-btn active" data-viz="spectrum">Spectrum</button><button class="outline-btn" data-viz="wave">Waveform</button><button class="outline-btn" data-viz="radial">Radial</button></div></div><div class="panel visualizer-panel"><div class="viz-heading"><span id="viz-mode-label">FREQUENCY SPECTRUM</span><span id="viz-level">POST-DSP AUDIO</span></div><canvas id="visualizer-canvas" aria-label="Live audio visualizer"></canvas><div class="viz-footer"><span id="viz-track">Awaiting playback</span><span id="viz-status">Play a local track to begin</span></div></div></section>
 <footer class="player-bar"><button class="mini-cover" data-page="music" aria-label="Open music"><svg><use href="#music-icon"/></svg></button><button class="track-info" data-page="music"><strong id="track-title">No track selected</strong><span id="track-subtitle">Add music to get started</span></button><div class="transport"><button class="icon-btn minor" id="shuffle" aria-label="Shuffle" aria-pressed="false"><svg><use href="#shuffle-icon"/></svg></button><button class="icon-btn" id="previous" aria-label="Previous track"><svg><use href="#previous-icon"/></svg></button><button class="play-btn" id="play" aria-label="Play"><svg><use href="#play-icon"/></svg></button><button class="icon-btn" id="next" aria-label="Next track"><svg><use href="#next-icon"/></svg></button><button class="icon-btn minor" id="repeat" aria-label="Repeat" aria-pressed="false"><svg><use href="#repeat-icon"/></svg></button></div><div class="seek-control"><input class="range" id="seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Playback position" disabled><div><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div><div class="master-volume"><button class="icon-btn" id="master-mute" aria-label="Mute" aria-pressed="false"><svg><use href="#volume-icon"/></svg></button><input class="range" id="master-volume" type="range" min="0" max="100" value="65" aria-label="Master volume"><output id="volume-value">65</output></div></footer>
 </main></div><input id="music-files" type="file" accept="audio/*,.flac,.mp3,.wav,.ogg,.m4a" multiple hidden><audio id="audio-player" preload="metadata"></audio><div class="toast" id="toast" role="status" aria-live="polite"></div>
-<dialog id="help-dialog"><button id="close-help" class="outline-btn">Close</button><span class="eyebrow">IPHONE 15 / CONNECTION PLAN</span><h2 id="help-title"></h2><p id="help-body"></p><p class="muted">Planning information · no device connection attempted</p></dialog><script>/* 12 dB/oct Linkwitz–Riley source-band splitter. No hardware-specific commands. */
+<dialog id="delete-music-dialog" aria-labelledby="delete-music-title"><h2 id="delete-music-title">Delete from Pi?</h2><p id="delete-music-name"></p><p>This permanently removes the saved copy from onboard storage. Any original USB file stays untouched.</p><p id="delete-music-playing" class="muted" hidden>Playback will stop for this track.</p><p id="delete-music-error" role="alert" hidden></p><div class="delete-music-actions"><button id="cancel-delete-music" class="outline-btn" autofocus>Cancel</button><button id="confirm-delete-music" class="danger-btn">Delete file</button></div></dialog><dialog id="help-dialog"><button id="close-help" class="outline-btn">Close</button><span class="eyebrow">IPHONE 15 / CONNECTION PLAN</span><h2 id="help-title"></h2><p id="help-body"></p><p class="muted">Planning information · no device connection attempted</p></dialog><script>/* 12 dB/oct Linkwitz–Riley source-band splitter. No hardware-specific commands. */
 (function (root) {
   'use strict';
+  const frequencies=[20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+  const grids=new Map();
+  function peaking(frequency,sampleRate,gain,Q=4.318){
+    const w=2*Math.PI*Math.min(frequency,sampleRate*.499)/sampleRate;
+    const A=10**(gain/40),alpha=Math.sin(w)/(2*Q),c=Math.cos(w),a0=1+alpha/A;
+    return {feedforward:[(1+alpha*A)/a0,-2*c/a0,(1-alpha*A)/a0],
+      feedback:[1,-2*c/a0,(1-alpha/A)/a0]};
+  }
+  function eqHeadroom(gains,sampleRate,bypass=false){
+    if(bypass||!gains.some(g=>g>0))return {peakDB:0,attenuationDB:0,gain:1};
+    if(!grids.has(sampleRate)){
+      const points=[0,sampleRate/2,...frequencies.map(f=>Math.min(f,sampleRate*.499))];
+      for(let i=0;i<4096;i++)points.push(5*(sampleRate*.49999/5)**(i/4095));
+      const grid=points.map(f=>{const w=2*Math.PI*f/sampleRate;return [Math.cos(w),Math.sin(w),Math.cos(2*w),Math.sin(2*w)];});
+      if(grids.size>=4)grids.clear();grids.set(sampleRate,grid);
+    }
+    const response=new Float64Array(grids.get(sampleRate).length),grid=grids.get(sampleRate);
+    gains.forEach((gain,i)=>{
+      if(!gain)return;
+      const {feedforward:b,feedback:a}=peaking(frequencies[i],sampleRate,gain);
+      grid.forEach(([c,s,c2,s2],j)=>{
+        const nr=b[0]+b[1]*c+b[2]*c2,ni=b[1]*s+b[2]*s2;
+        const dr=a[0]+a[1]*c+a[2]*c2,di=a[1]*s+a[2]*s2;
+        response[j]+=10*Math.log10(Math.max(1e-30,(nr*nr+ni*ni)/Math.max(1e-30,dr*dr+di*di)));
+      });
+    });
+    let peakDB=0;for(const value of response)peakDB=Math.max(peakDB,value);
+    // Guard the sampled response estimate; flat/cut-only/bypassed EQ stays at unity.
+    const attenuationDB=peakDB>1e-5?Math.ceil((peakDB+.25)*10)/10:0;
+    return {peakDB,attenuationDB,gain:10**(-attenuationDB/20)};
+  }
   function crossover(frequency, sampleRate, type) {
     const k = Math.tan(Math.PI * frequency / sampleRate);
     const norm = 1 / (1 + 2*k + k*k); // Q = 0.5, two coincident real poles.
@@ -111,7 +152,7 @@
     gains.mid.gain.value=-1;gains.mid.connect(output);gains.high.connect(output);
     return gains;
   }
-  const api = {crossover,allpass,createBands};
+  const api = {crossover,allpass,createBands,frequencies,peaking,eqHeadroom};
   if(typeof module !== 'undefined' && module.exports) module.exports=api; else root.CivicDSP=api;
 })(typeof window === 'undefined' ? {} : window);
 </script><script>/* Read common ID3v2.3/v2.4 and FLAC metadata locally; never upload music. */
@@ -143,12 +184,248 @@ window.CivicMetadata = async function(file) {
   }
   return result;
 };
+</script><script>/* Same-origin, local-only input to the existing Web Audio DSP. No microphone. */
+window.CivicBluetooth = class {
+  constructor(onChange){
+    this.onChange=onChange;this.selected=false;this.active=false;this.info={};
+    this.socket=null;this.node=null;this.retry=null;this.lastPacket=0;
+    this.poll();this.pollTimer=setInterval(()=>this.poll(),2000);
+  }
+  notify(error=''){
+    this.active=!!this.selected&&this.socket?.readyState===WebSocket.OPEN&&
+      this.context?.state==='running'&&performance.now()-this.lastPacket<1500;
+    this.onChange({...this.info,selected:this.selected,active:this.active,error:error||this.info.error||''});
+  }
+  async poll(){
+    if(location.protocol==='file:')return;
+    try{const response=await fetch('/api/bluetooth/status',{cache:'no-store'});
+      if(!response.ok)throw new Error('Bluetooth is available on the Pi display only.');
+      this.info=await response.json();this.notify();
+    }catch(error){this.info={ready:false,error:error.message};this.notify();}
+  }
+  async start(context,input){
+    this.stop();this.context=context;this.input=input;
+    if(context.sampleRate!==48000)throw new Error('Bluetooth requires a 48 kHz audio context. Reload this page.');
+    if(this.moduleContext!==context){await context.audioWorklet.addModule('/static/js/pcm-player.js');this.moduleContext=context;}
+    if(context.state!=='running')throw new Error('Tap Use Bluetooth to enable audio.');
+    this.node=new AudioWorkletNode(context,'civic-pcm-player',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[2]});
+    this.node.connect(input);this.selected=true;this.connect();
+  }
+  connect(){
+    if(!this.selected)return;
+    this.lastPacket=0;
+    const socket=new WebSocket(`${location.protocol==='https:'?'wss':'ws'}://${location.host}/api/bluetooth/audio`);
+    socket.binaryType='arraybuffer';this.socket=socket;
+    socket.onmessage=event=>{
+      if(this.socket!==socket)return;
+      if(typeof event.data==='string'){
+        const message=JSON.parse(event.data);
+        if(message.error){this.notify(message.error);socket.close();return;}
+        if(message.sample_rate!==48000||message.channels!==2){this.notify('Unsupported Bluetooth audio format.');socket.close();return;}
+        socket.send('ready');socket.send('heartbeat');
+        this.heartbeat=setInterval(()=>{
+          if(socket.readyState===WebSocket.OPEN&&this.context.state==='running')socket.send('heartbeat');
+        },1000);
+      }else{
+        if(event.data.byteLength%8)return;
+        this.lastPacket=performance.now();
+        this.node.port.postMessage(new Float32Array(event.data),[event.data]);
+        if(!this.active)this.notify();
+      }
+    };
+    socket.onclose=()=>{
+      if(this.socket!==socket)return;
+      clearInterval(this.heartbeat);this.socket=null;this.node?.port.postMessage('clear');
+      this.notify('Bluetooth bridge reconnecting…');
+      if(this.selected)this.retry=setTimeout(()=>this.connect(),2000);
+    };
+    socket.onerror=()=>{};this.notify();
+  }
+  stop(){
+    this.selected=false;this.active=false;clearTimeout(this.retry);clearInterval(this.heartbeat);
+    const socket=this.socket;this.socket=null;socket?.close();
+    this.node?.disconnect();this.node=null;this.lastPacket=0;this.notify();
+  }
+  get playing(){return this.selected&&this.active&&this.info.playing===true;}
+};
+</script><script>(() => {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  let visible=false,timer=null,controller=null,generation=0;
+  const labels={disabled:'Setup pending',setup:'Setup needed',connecting:'Connecting',initializing:'Reading ECU',live:'Connected',stale:'Readings stale',adapter_only:'No ECU response',reconnecting:'Reconnecting'};
+  function clearReadings(){document.querySelectorAll('[data-obd-value]').forEach(el=>el.textContent='—');}
+  function render(data){
+    $('obd-badge').textContent=labels[data.state]||'Not connected';
+    $('obd-badge').classList.toggle('obd-live',data.live===true);
+    $('obd-message').textContent=data.message||'Waiting for vehicle data.';
+    $('obd-protocol').textContent=data.live&&data.protocol?data.protocol:'ELM327 · read-only';
+    $('obd-age').textContent=data.age_seconds==null?'No vehicle readings yet':data.live?`Updated ${Math.floor(data.age_seconds)}s ago`:`Last ECU response ${Math.floor(data.age_seconds)}s ago`;
+    $('obd-voltage-label').textContent=data.voltage_source==='adapter'?'OBD2 supply voltage':'ECU voltage';
+    document.querySelectorAll('[data-obd-value]').forEach(el=>{
+      const key=el.dataset.obdValue,sample=data.sensors?.[key],fresh=data.live&&sample?.value!=null&&Number.isFinite(sample.value);
+      const decimals=key==='voltage'?1:['load','throttle','short_trim','long_trim','map'].includes(key)?1:0;
+      el.textContent=fresh?sample.value.toFixed(decimals):'—';
+      el.closest('article').classList.toggle('unavailable',!fresh);
+      const detail=el.closest('article').querySelector('[data-obd-detail]');
+      if(detail)detail.textContent=sample?.supported===false?'Not supported by this ECU':fresh?`Updated ${Math.floor(sample.age_seconds||0)}s ago`:sample?.supported===true?'Waiting for a fresh reading':data.live?'No reading returned':'Awaiting connection';
+    });
+    const list=$('obd-code-list');list.replaceChildren();
+    if(Array.isArray(data.codes)){
+      $('obd-codes-state').textContent=data.codes_error|| (data.codes.length?`${data.codes.length} stored ${data.codes.length===1?'code':'codes'}`:'No stored trouble codes reported');
+      for(const item of data.codes){const row=document.createElement('article');row.className='obd-code';const code=document.createElement('strong'),description=document.createElement('p');code.textContent=item.code;description.textContent=item.description||'Description unavailable';row.append(code,description);list.append(row);}
+    }else $('obd-codes-state').textContent=data.codes_error|| (data.live?'Select Scan codes to read stored codes.':'Connect to the vehicle to read trouble codes.');
+    $('obd-scan-codes').disabled=!data.live||data.codes_scanning;
+    $('obd-scan-codes').textContent=data.codes_scanning?'Reading…':'Scan codes';
+    $('obd-code-age').textContent=data.codes_age_seconds==null?'':`Code scan ${Math.floor(data.codes_age_seconds)}s ago · generic OBD2 descriptions`;
+  }
+  async function poll(){
+    if(!visible||document.hidden)return schedule();
+    if(controller)return;
+    const requestController=new AbortController(),version=generation;
+    controller=requestController;const timeout=setTimeout(()=>requestController.abort(),3000);
+    try{
+      const response=await fetch('/api/obd/status',{cache:'no-store',signal:requestController.signal});
+      if(!response.ok)throw new Error();
+      const data=await response.json();if(visible&&version===generation)render(data);
+    }catch(error){
+      if(visible&&version===generation){clearReadings();$('obd-code-list').replaceChildren();$('obd-codes-state').textContent='Diagnostics unavailable · no current code scan';$('obd-badge').textContent='Not connected';$('obd-badge').classList.remove('obd-live');$('obd-message').textContent=location.protocol==='file:'?'Run the Flask dashboard on the Pi for live OBD2 readings.':'Diagnostics service is unavailable. Retrying…';$('obd-scan-codes').disabled=true;}
+    }finally{clearTimeout(timeout);if(controller===requestController)controller=null;if(version===generation)schedule();}
+  }
+  function schedule(){clearTimeout(timer);if(visible)timer=setTimeout(poll,1000);}
+  async function action(path){
+    try{const response=await fetch(path,{method:'POST',headers:{'X-Civic-Request':'1'}});const data=await response.json();if(!response.ok)throw new Error(data.error||'The request could not be completed.');clearTimeout(timer);poll();}
+    catch(error){$('obd-message').textContent=error.message;}
+  }
+  $('obd-reconnect').onclick=()=>action('/api/obd/reconnect');
+  $('obd-scan-codes').onclick=()=>action('/api/obd/codes');
+  document.querySelectorAll('[data-obd-view]').forEach(button=>button.onclick=()=>{
+    document.querySelectorAll('[data-obd-view]').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+    document.querySelectorAll('[data-obd-panel]').forEach(panel=>panel.hidden=panel.dataset.obdPanel!==button.dataset.obdView);
+  });
+  window.CivicDiagnostics={setVisible(value){visible=value;generation++;clearTimeout(timer);controller?.abort();controller=null;if(visible)poll();}};
+})();
+</script><script>(function(root){
+  'use strict';
+  class Envelope {
+    constructor(){this.reset();}
+    reset(){this.value=0;this.baseline=0;this.previous=0;this.initialized=false;}
+    update(rms,dt,sensitivity=.6,strength=.9){
+      rms=Math.max(0,Math.min(1,Number.isFinite(rms)?rms:0));
+      dt=Math.max(0,Math.min(.5,Number.isFinite(dt)?dt:0));
+      sensitivity=Math.max(.1,Math.min(2,Number.isFinite(sensitivity)?sensitivity:.6));
+      strength=Math.max(0,Math.min(1,Number.isFinite(strength)?strength:.9));
+      if(!this.initialized){this.baseline=rms;this.previous=rms;this.initialized=true;return 0;}
+      // Detect upward changes relative to recent bass energy. A sustained note
+      // produces one onset, then releases instead of holding maximum brightness.
+      const rise=Math.max(0,(rms-this.previous)/Math.max(.006,this.baseline)-.12);
+      const target=rms>.003?Math.min(1,rise*1.8*sensitivity):0;
+      this.baseline+=(rms-this.baseline)*(1-Math.exp(-dt/.8));
+      this.previous=rms;
+      const time=target>this.value ? .025 : .18;
+      this.value+=(target-this.value)*(1-Math.exp(-dt/time));
+      return strength*this.value;
+    }
+  }
+  function createTap(graph){
+    const {ctx,volume}=graph,split=ctx.createChannelSplitter(2),silent=ctx.createGain();silent.gain.value=0;
+    volume.connect(split);silent.connect(ctx.destination);
+    const analysers=[0,1].map(channel=>{
+      const high=ctx.createBiquadFilter(),low=ctx.createBiquadFilter(),analyser=ctx.createAnalyser();
+      high.type='highpass';high.frequency.value=25;high.Q.value=20*Math.log10(Math.SQRT1_2);
+      low.type='lowpass';low.frequency.value=90;low.Q.value=20*Math.log10(Math.SQRT1_2);
+      analyser.fftSize=2048;split.connect(high,channel);high.connect(low);low.connect(analyser);analyser.connect(silent);
+      return {high,low,analyser,data:new Float32Array(analyser.fftSize)};
+    });
+    return {sample(){
+      if(ctx.state!=='running')return 0;
+      let energy=0,count=0;
+      for(const {analyser,data} of analysers){analyser.getFloatTimeDomainData(data);for(const value of data){energy+=value*value;count++;}}
+      return Math.sqrt(energy/count);
+    },close(){volume.disconnect(split);split.disconnect();silent.disconnect();for(const a of analysers){a.high.disconnect();a.low.disconnect();a.analyser.disconnect();}}};
+  }
+  const api={Envelope,createTap};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.CivicBass=api;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>(() => {
+  'use strict';
+  const $=id=>document.getElementById(id);
+  let visible=false,status=null,pollTimer=null,polling=false,actionBusy=false,pulseBusy=false,tap=null,tapGraph=null,lastSample=performance.now();
+  const envelope=new CivicBass.Envelope();
+  let sensitivity=.6,strength=.9;
+  try{const saved=JSON.parse(localStorage.getItem('civic-light-response')||'null');if(saved?.version===2){sensitivity=Math.max(.1,Math.min(2,Number.isFinite(saved.sensitivity)?saved.sensitivity:.6));strength=Math.max(0,Math.min(1,Number.isFinite(saved.strength)?saved.strength:.9));}}catch{}
+  $('light-sensitivity').value=sensitivity;$('light-strength').value=Math.round(strength*100);
+  function fill(input){input.style.setProperty('--fill',`${100*(Number(input.value)-Number(input.min))/(Number(input.max)-Number(input.min))}%`);}
+  function render(data){
+    status=data;const ready=data.connected===true,bass=data.mode==='bass';
+    $('light-badge').textContent=ready?'Connected':({setup:'Setup needed',disabled:'Setup pending',connecting:'Connecting',reading:'Reading controller',reconnecting:'Reconnecting',stale:'Waiting for state'}[data.state]||'Not connected');
+    $('light-badge').classList.toggle('obd-live',ready);$('light-controls').disabled=!ready||actionBusy;
+    $('light-message').textContent=data.error||data.message||'Waiting for the light controller.';
+    $('light-detail').textContent=ready?(bass?(data.pulsing?'Bass pulse active':'Bass pulse armed · waiting for audio'):`Controller updated ${Math.floor(data.age_seconds||0)}s ago`):'Power the ATOTO light controller to connect.';
+    document.querySelectorAll('[data-light-mode]').forEach(b=>{const active=b.dataset.lightMode===data.mode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+    $('light-response').hidden=!bass;
+    for(const zone of ['front','rear']){
+      const value=bass?data.limits?.[zone]:data.reported?.[zone];
+      if(value!=null&&document.activeElement!==$(`light-${zone}`))$(`light-${zone}`).value=value;
+      fill($(`light-${zone}`));
+      $(`light-${zone}-value`).textContent=value==null?'—':`${value} / 9`;
+      $(`light-${zone}-label`).textContent=`${zone==='front'?'Front':'Rear'} ${bass?'maximum':'brightness'}`;
+    }
+    const color=data.reported?.color;
+    if(color){$('light-preview').style.background=color;$('light-color-value').textContent=color;if(document.activeElement!==$('light-color'))$('light-color').value=color;}
+    else{$('light-color-value').textContent='—';$('light-preview').style.background='#263449';}
+    for(const on of [true,false]){const b=$(on?'light-on':'light-off'),active=ready&&data.reported?.power===(on?1:0);b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));}
+  }
+  async function poll(){
+    if(polling)return;
+    polling=true;
+    try{const response=await fetch('/api/lights/status',{cache:'no-store',signal:AbortSignal.timeout(3000)});if(!response.ok)throw new Error();render(await response.json());}
+    catch{render({connected:false,state:'reconnecting',mode:status?.mode||'solid',message:location.protocol==='file:'?'Run the Flask dashboard on the Pi for lighting control.':'Lighting service unavailable. Retrying…'});}
+    finally{polling=false;schedule();}
+  }
+  function schedule(){clearTimeout(pollTimer);if(visible||status?.mode==='bass')pollTimer=setTimeout(poll,1000);}
+  async function action(value){
+    if(actionBusy)return;
+    actionBusy=true;$('light-controls').disabled=true;
+    try{
+      if(value.mode==='bass')await window.CivicAudio.ensure();
+      const response=await fetch('/api/lights/settings',{method:'POST',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify(value),signal:AbortSignal.timeout(4000)});
+      const result=await response.json();if(!response.ok)throw new Error(result.error||'Lighting command failed.');
+      // Reported controls update only from controller notifications, not this POST.
+      await new Promise(resolve=>setTimeout(resolve,600));await poll();
+    }catch(error){$('light-message').textContent=error.message;}
+    finally{actionBusy=false;$('light-controls').disabled=status?.connected!==true;}
+  }
+  $('light-on').onclick=()=>action({power:true});$('light-off').onclick=()=>action({power:false});
+  $('light-reconnect').onclick=async()=>{try{await fetch('/api/lights/reconnect',{method:'POST',headers:{'X-Civic-Request':'1'}});poll();}catch{$('light-message').textContent='Lighting service unavailable.';}};
+  document.querySelectorAll('[data-light-mode]').forEach(b=>b.onclick=()=>action({mode:b.dataset.lightMode}));
+  document.querySelectorAll('[data-light-color]').forEach(b=>b.onclick=()=>action({color:b.dataset.lightColor}));
+  $('light-color').onchange=()=>action({color:$('light-color').value});
+  for(const zone of ['front','rear']){$(`light-${zone}`).oninput=()=>{fill($(`light-${zone}`));$(`light-${zone}-value`).textContent=`${$(`light-${zone}`).value} / 9`;};$(`light-${zone}`).onchange=()=>action({[zone]:Number($(`light-${zone}`).value)});}
+  function responseSettings(){
+    sensitivity=Number($('light-sensitivity').value);strength=Number($('light-strength').value)/100;
+    fill($('light-sensitivity'));fill($('light-strength'));
+    $('light-sensitivity-value').textContent=sensitivity.toFixed(1)+'×';$('light-strength-value').textContent=Math.round(strength*100)+'%';
+    try{localStorage.setItem('civic-light-response',JSON.stringify({version:2,sensitivity,strength}));}catch{}
+  }
+  $('light-sensitivity').oninput=responseSettings;$('light-strength').oninput=responseSettings;responseSettings();
+  setInterval(async()=>{
+    const now=performance.now(),dt=(now-lastSample)/1000;lastSample=now;
+    if(status?.mode!=='bass'||!status.connected||document.hidden){envelope.reset();return;}
+    const graph=window.CivicAudio?.getGraph();if(!graph||graph.ctx.state!=='running')return;
+    if(graph!==tapGraph){tap?.close();tap=CivicBass.createTap(graph);tapGraph=graph;}
+    const intensity=envelope.update(tap.sample(),dt,sensitivity,strength);
+    $('light-bass-fill').style.width=`${Math.round(intensity*100)}%`;
+    if(pulseBusy)return;
+    pulseBusy=true;
+    try{await fetch('/api/lights/pulse',{method:'POST',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify({level:intensity}),signal:AbortSignal.timeout(800)});}catch{}finally{pulseBusy=false;}
+  },125);
+  window.CivicLights={setVisible(value){visible=value;if(visible)poll();else schedule();}};
+})();
 </script><script>(() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const all = selector => [...document.querySelectorAll(selector)];
   const clamp = (value, min, max, fallback = 0) => Number.isFinite(Number(value)) ? Math.min(max, Math.max(min, Number(value))) : fallback;
-  const frequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+  const frequencies = CivicDSP.frequencies;
   const frequencyLabel = f => f >= 1000 ? `${f / 1000}k` : `${f}`;
   const speakers = [
     {id:'tl',location:'L · Sail panel',position:'FRONT LEFT · SAIL PANEL',brand:'Rockford Fosgate',model:'P165-SI',size:'1″ tweeter',detail:'P165-SI · 1″ PEI tweeter',side:'L',band:'high',key:'highL'},
@@ -172,8 +449,10 @@ window.CivicMetadata = async function(file) {
   } catch { /* Browser storage may be unavailable; use session defaults. */ }
   let selected = speakers[0], selectedEQ = 17, audition = false, muted = false, graph = null;
   let toastTimer, vizMode = 'spectrum', vizFrame = null, currentPage = 'sound', shuffle = false, repeat = false;
+  let sourceMode = 'local', bluetoothStarting = false, restoreBluetooth = false, sourceChoiceResolved = false;
+  try{restoreBluetooth=localStorage.getItem('civic-audio-source')==='bluetooth';}catch{}
   const cutRestore = {};
-  const player = $('audio-player'), tracks = []; let trackIndex = -1, usbScanned = false, savingTrack = false;
+  const player = $('audio-player'), tracks = []; let trackIndex = -1, usbScanned = false, savingTrack = false, deletingTrack = false, deleteTarget = null;
   const icon = name => `<svg aria-hidden="true"><use href="#${name}-icon"/></svg>`;
   function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('visible'),4200); }
   function dirty() { $('profile-status').textContent = 'Save tuning'; }
@@ -185,6 +464,8 @@ window.CivicMetadata = async function(file) {
     all('.nav-btn').forEach(b => {const active = b.dataset.page === id || (['phone','visualizer'].includes(id) && b.dataset.page === 'apps'); b.classList.toggle('active',active); active ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current');});
     const titles = {sound:'Sound studio',home:'Overview',music:'Your music',phone:'Phone audio',lights:'Cabin lighting',vehicle:'Vehicle diagnostics',apps:'Applications',visualizer:'Visualizer'};
     $('page-title').textContent = titles[id];
+    window.CivicDiagnostics?.setVisible(id==='vehicle');
+    window.CivicLights?.setVisible(id==='lights');
     if (id === 'visualizer') startVisualizer(); else {cancelAnimationFrame(vizFrame); vizFrame = null;}
     if (id === 'music' && !usbScanned) {usbScanned = true; scanUSB(false);}
   }
@@ -243,10 +524,10 @@ window.CivicMetadata = async function(file) {
   $('stereo-width').oninput=e=>{state.width=Number(e.target.value);dirty();renderStage();updateDSP();};$('balance').oninput=e=>{state.balance=Number(e.target.value);dirty();renderStage();updateDSP();};
   $('width-reset').onclick=()=>{state.width=100;dirty();renderStage();updateDSP();};$('balance-reset').onclick=()=>{state.balance=0;dirty();renderStage();updateDSP();};
   $('save-profile').onclick=()=>{try{localStorage.setItem('civic-sound-v1',JSON.stringify(state));$('profile-status').textContent='Tuning saved';toast('Tuning saved on this device.');}catch{toast('Browser storage is unavailable. Tuning will last for this session.');}};
-  // Only browser-local media enters this graph. Bluetooth requires a later PipeWire backend.
+  // Local media and Bluetooth PCM enter the same graph, before headroom/EQ.
   async function ensureAudio(){
-    if(graph){await graph.ctx.resume();return;}
-    const ctx=new AudioContext();const source=ctx.createMediaElementSource(player),headroom=ctx.createGain();headroom.gain.value=10**(-12/20);headroom.channelCount=2;headroom.channelCountMode='explicit';source.connect(headroom);
+    if(graph){await resumeAudio(graph.ctx);return;}
+    const ctx=new AudioContext({sampleRate:48000,latencyHint:'interactive'});const source=ctx.createMediaElementSource(player),localGain=ctx.createGain(),headroom=ctx.createGain();headroom.gain.value=0;headroom.channelCount=2;headroom.channelCountMode='explicit';source.connect(localGain);localGain.connect(headroom);
     let tail=headroom;const eq=frequencies.map(f=>{const node=ctx.createBiquadFilter();node.type='peaking';node.frequency.value=Math.min(f,ctx.sampleRate*.499);node.Q.value=4.318;tail.connect(node);tail=node;return node;});
     const split=ctx.createChannelSplitter(2),merge=ctx.createChannelMerger(2);tail.connect(split);
     // Mid/side matrix: L'=(1+w)L/2+(1-w)R/2, R'=(1-w)L/2+(1+w)R/2.
@@ -257,12 +538,82 @@ window.CivicMetadata = async function(file) {
       return {...bands,level};
     });
     const guard=ctx.createDynamicsCompressor();guard.threshold.value=-1;guard.knee.value=0;guard.ratio.value=20;guard.attack.value=.003;guard.release.value=.1;
-    const volume=ctx.createGain(),analyser=ctx.createAnalyser();analyser.fftSize=2048;merge.connect(guard);guard.connect(volume);volume.connect(analyser);analyser.connect(ctx.destination);
-    graph={ctx,eq,matrix,channels,volume,analyser};updateDSP();await ctx.resume();
+    // Cancel Chromium's automatic compressor makeup gain for this hard-knee curve.
+    // The guard remains active, without adding gain below its threshold.
+    const guardUnity=ctx.createGain();guardUnity.gain.value=10**(.6*guard.threshold.value*(1-1/guard.ratio.value)/20);
+    const volume=ctx.createGain(),analyser=ctx.createAnalyser();analyser.fftSize=2048;merge.connect(guard);guard.connect(guardUnity);guardUnity.connect(volume);volume.connect(analyser);analyser.connect(ctx.destination);
+    graph={ctx,eq,matrix,channels,volume,analyser,input:headroom,headroom,localGain};updateDSP();await resumeAudio(ctx);
   }
-  function ramp(param,value){param.setTargetAtTime(value,graph.ctx.currentTime,.02);}
+  async function resumeAudio(ctx){
+    await Promise.race([ctx.resume(),new Promise(resolve=>setTimeout(resolve,1200))]);
+    if(ctx.state!=='running')throw new Error('Tap Use Bluetooth to enable audio.');
+  }
+  const bluetooth=new CivicBluetooth(info=>{
+    if(!sourceChoiceResolved&&typeof info.enabled==='boolean'){
+      sourceChoiceResolved=true;
+      if(info.preferred_source==='bluetooth')restoreBluetooth=true;
+      if(info.preferred_source==='local')restoreBluetooth=false;
+    }
+    const selected=info.selected;
+    $('bluetooth-state').textContent=info.error||(!info.enabled?'Bluetooth bridge not enabled':!info.ready?'Preparing Pi audio…':!info.connected?'Waiting for your iPhone':selected&&info.active?info.playing?'Bluetooth · DSP active':'Connected · playback paused':'iPhone connected · select Use Bluetooth');
+    $('bluetooth-badge').textContent=info.connected?(info.active?'DSP active':'iPhone connected'):'Not connected';
+    $('bluetooth-state').classList.toggle('is-live',selected&&info.active);
+    $('use-bluetooth').disabled=bluetoothStarting||!info.ready;
+    $('use-bluetooth').textContent=bluetoothStarting?'Starting…':selected?'Reconnect Bluetooth':'Use Bluetooth';
+    $('use-local').classList.toggle('active',!selected);
+    $('output-source').textContent=selected?'BLUETOOTH':'LOCAL';
+    if(selected){$('track-title').textContent='Bluetooth audio';$('track-subtitle').textContent='iPhone · 31-band EQ + DSP';$('viz-track').textContent='iPhone · Bluetooth';}
+    ['play','next','previous','shuffle','repeat'].forEach(id=>{$(id).disabled=selected;$(id).title=selected?'Use playback controls on your iPhone':'';});
+    if(selected){$('seek').disabled=true;$('seek').value=0;fill($('seek'));$('elapsed').textContent='LIVE';$('duration').textContent='—';}
+    if(restoreBluetooth&&info.ready){restoreBluetooth=false;useBluetooth();}
+  });
+  function rememberSource(source){
+    try{localStorage.setItem('civic-audio-source',source);}catch{}
+    if(location.protocol==='file:')return;
+    fetch('/api/bluetooth/source',{method:'POST',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify({source})})
+      .then(response=>{if(!response.ok)throw new Error();})
+      .catch(()=>toast('Audio source changed, but it could not be saved for startup.'));
+  }
+  async function useBluetooth(){
+    if(bluetoothStarting)return;bluetoothStarting=true;$('use-bluetooth').disabled=true;
+    try{
+      await ensureAudio();player.pause();
+      await bluetooth.start(graph.ctx,graph.input);
+      graph.localGain.gain.value=0;sourceMode='bluetooth';
+      rememberSource('bluetooth');
+      $('play').classList.remove('playing');$('play').innerHTML=icon('play');
+      toast('Bluetooth now uses the EQ, source-band trims, sound stage and visualizer.');
+    }catch(error){bluetooth.stop();sourceMode='local';if(graph)graph.localGain.gain.value=1;toast(error.message||'Bluetooth audio could not start.');}
+    finally{bluetoothStarting=false;bluetooth.notify();}
+  }
+  function useLocal(){
+    restoreBluetooth=false;bluetooth.stop();sourceMode='local';if(graph)graph.localGain.gain.value=1;
+    rememberSource('local');
+    if(tracks[trackIndex])showTrackMetadata(tracks[trackIndex]);
+    else{$('track-title').textContent='No track selected';$('track-subtitle').textContent='Choose USB or onboard music';$('viz-track').textContent='Awaiting playback';}
+    $('seek').disabled=!Number.isFinite(player.duration)||player.duration<=0;
+    $('elapsed').textContent=timeLabel(player.currentTime);$('duration').textContent=timeLabel(player.duration);
+  }
+  $('use-bluetooth').onclick=useBluetooth;$('use-local').onclick=useLocal;
+  function ramp(param,value){const now=graph.ctx.currentTime;param.cancelAndHoldAtTime(now);param.setTargetAtTime(value,now,.02);}
+  function updateEQHeadroom(){
+    const gains=state.eq.map(gain=>state.bypass?0:gain),key=gains.join(',');
+    if(graph.eqKey===key)return;
+    const result=CivicDSP.eqHeadroom(gains,graph.ctx.sampleRate);
+    // Reserve for overlapping old/new filters while a preset or band changes.
+    const previous=(graph.ctx.currentTime<(graph.eqHoldUntil||0)?graph.eqEnvelope:graph.eqGains)||Array(31).fill(0);
+    const envelope=gains.map((gain,i)=>Math.max(gain,previous[i]));
+    const transition=CivicDSP.eqHeadroom(envelope,graph.ctx.sampleRate);
+    const now=graph.ctx.currentTime,param=graph.headroom.gain;
+    param.cancelAndHoldAtTime(now);
+    param.setTargetAtTime(Math.min(param.value,transition.gain),now,.003);
+    param.setTargetAtTime(result.gain,now+.2,.15);
+    graph.eq.forEach((node,i)=>{node.gain.cancelAndHoldAtTime(now);node.gain.setTargetAtTime(gains[i],now+.02,.02);});
+    graph.eqGains=gains;graph.eqEnvelope=envelope;graph.eqHoldUntil=now+.25;graph.eqKey=key;
+    $('eq-headroom').textContent=`Auto headroom: ${result.attenuationDB?`−${result.attenuationDB.toFixed(1)}`:'0.0'} dB · peak guard`;
+  }
   function updateDSP(){if(!graph)return;const w=state.width/100;const norm=Math.max(1,w);[ (1+w)/2,(1-w)/2,(1-w)/2,(1+w)/2 ].forEach((value,i)=>ramp(graph.matrix[i].gain,value/norm));
-    graph.eq.forEach((node,i)=>ramp(node.gain,state.bypass?0:state.eq[i]));
+    updateEQHeadroom();
     graph.channels.forEach((c,i)=>{const side=i?'R':'L';
       ['low','mid','high'].forEach(band=>{const enabled=!audition||selected.band==='full'||selected.band===band;const db=state.gains[band==='low'?'low':`${band}${side}`];ramp(c[band].gain,enabled?(band==='mid'?-1:1)*10**(db/20):0);});
       const balance=state.balance/100;let gain=10**(state.gains[`full${side}`]/20)*(i===0?1-Math.max(0,balance):1+Math.min(0,balance));
@@ -274,7 +625,7 @@ window.CivicMetadata = async function(file) {
   function chooseFiles(){$('music-files').click();} all('.choose-files').forEach(b=>b.onclick=chooseFiles);
   function renderLibrary(){const list=$('track-list');list.replaceChildren();const query=$('library-search').value.toLowerCase();$('track-count').textContent=`${tracks.length} ${tracks.length===1?'track':'tracks'}`;
     if(!tracks.length){list.innerHTML=`<div class="empty-library">${icon('music')}<h3>No music loaded</h3><p>Add MP3, FLAC, WAV or other browser-supported audio.</p><button class="outline-btn choose-files">Choose music</button></div>`;list.querySelector('button').onclick=chooseFiles;return;}
-    tracks.forEach((track,i)=>{if(!`${track.title} ${track.artist}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.className=`track-row${i===trackIndex?' active':''}`;const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=track.title;const ext=document.createElement('small');ext.textContent=`${track.format} · ${track.origin==='onboard'?'PI':track.origin==='usb'?'USB':'LOCAL'}`;b.append(n,title,ext);b.onclick=()=>loadTrack(i,true);list.append(b);});if(!list.childElementCount){const p=document.createElement('p');p.className='system-note';p.textContent='No matching tracks.';list.append(p);}
+    tracks.forEach((track,i)=>{if(!`${track.title} ${track.artist}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.className=`track-row${i===trackIndex?' active':''}`;if(track.id)b.dataset.trackId=track.id;const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=track.title;const ext=document.createElement('small');ext.textContent=`${track.format} · ${track.origin==='onboard'?'PI':track.origin==='usb'?'USB':'LOCAL'}`;b.append(n,title,ext);b.onclick=()=>loadTrack(i,true);const row=document.createElement('div');row.className='track-entry';row.append(b);if(track.origin==='onboard'&&track.delete_token){const remove=document.createElement('button');remove.className='delete-track';remove.textContent='Delete';remove.setAttribute('aria-label',`Delete ${track.title} from Pi`);remove.disabled=savingTrack||deletingTrack;remove.onclick=()=>confirmDeleteTrack(track);row.append(remove);}list.append(row);});if(!list.childElementCount){const p=document.createElement('p');p.className='system-note';p.textContent='No matching tracks.';list.append(p);}
   }
   $('library-search').oninput=renderLibrary;
   $('music-files').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const first=tracks.length;files.forEach(file=>tracks.push({file,origin:'local',format:file.name.split('.').pop().toUpperCase(),url:URL.createObjectURL(file),title:file.name.replace(/\.[^.]+$/,''),artist:'Local audio'}));renderLibrary();e.target.value='';await loadTrack(first,true);};
@@ -284,7 +635,7 @@ window.CivicMetadata = async function(file) {
       const response=await fetch('/api/library',{cache:'no-store'});if(!response.ok)throw new Error(response.status===409?'A USB scan is already running. Try again shortly.':'USB scanning requires the Flask backend.');
       const data=await response.json();if(!Array.isArray(data.tracks))throw new Error('Invalid USB library response.');
       const previous=tracks[trackIndex],old=new Map(tracks.filter(t=>t.origin!=='local').map(t=>[t.id,t]));
-      const indexed=data.tracks.map(t=>old.get(t.id)||{...t,origin:t.origin||'usb'}),local=tracks.filter(t=>t.origin==='local');
+      const indexed=data.tracks.map(t=>{const prior=old.get(t.id);return prior&&prior.delete_token===t.delete_token?prior:{...t,origin:t.origin||'usb'};}),local=tracks.filter(t=>t.origin==='local');
       const retained=new Set(indexed.map(t=>t.id));old.forEach(t=>{if(!retained.has(t.id)&&t.artwork)URL.revokeObjectURL(t.artwork);});
       tracks.splice(0,tracks.length,...local,...indexed);trackIndex=previous?tracks.indexOf(previous):-1;
       if(previous&&trackIndex<0){player.pause();player.removeAttribute('src');player.load();$('track-title').textContent='Music file unavailable';$('track-subtitle').textContent='Check your storage and scan again';}
@@ -297,7 +648,7 @@ window.CivicMetadata = async function(file) {
   $('scan-usb').onclick=()=>scanUSB();
   function renderSaveButton(){
     const track=tracks[trackIndex],saved=track?.origin==='onboard'||!!track?.savedOnboardId;
-    $('save-onboard').disabled=savingTrack||!track||saved||location.protocol==='file:';
+    $('save-onboard').disabled=savingTrack||deletingTrack||!track||saved||location.protocol==='file:';
     $('save-onboard').textContent=savingTrack?'Saving…':saved?'Saved on Pi':'Save to Pi';
     $('save-onboard').classList.toggle('is-saved',saved);
     $('storage-caption').textContent=track?.origin==='onboard'?'Stored onboard · USB drive not needed':saved?'An onboard copy is saved':track?.origin==='usb'?'Playing from USB · save a copy to keep it onboard':track?'Playing from this device · not yet stored on the Pi':'Save your tracks for playback without a USB drive';
@@ -320,16 +671,53 @@ window.CivicMetadata = async function(file) {
     }catch(error){toast(error.message||'Could not save this track. Check onboard storage and try again.');}
     finally{savingTrack=false;renderSaveButton();renderLibrary();}
   };
+  function confirmDeleteTrack(track){
+    if(deletingTrack||savingTrack||track.origin!=='onboard'||!track.delete_token)return;
+    deleteTarget={track,token:track.delete_token};
+    $('delete-music-name').textContent=track.title;
+    $('delete-music-playing').hidden=tracks[trackIndex]!==track||sourceMode!=='local'||player.paused;
+    $('delete-music-error').hidden=true;
+    $('delete-music-dialog').showModal();
+  }
+  $('cancel-delete-music').onclick=()=>{if(!deletingTrack){deleteTarget=null;$('delete-music-dialog').close();}};
+  $('delete-music-dialog').addEventListener('cancel',event=>{if(deletingTrack)event.preventDefault();else deleteTarget=null;});
+  $('confirm-delete-music').onclick=async()=>{
+    if(deletingTrack||!deleteTarget)return;
+    const {track,token}=deleteTarget;
+    deletingTrack=true;$('confirm-delete-music').disabled=true;$('cancel-delete-music').disabled=true;
+    $('confirm-delete-music').textContent='Deleting…';renderSaveButton();renderLibrary();
+    try{
+      const response=await fetch(`/api/library/${encodeURIComponent(track.id)}`,{method:'DELETE',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify({confirm:true,delete_token:token})});
+      const result=await response.json();if(!response.ok||result.deleted!==true)throw new Error(result.error||'Could not delete this file.');
+      const selected=tracks[trackIndex],wasSelected=selected===track;
+      if(wasSelected){
+        player.pause();player.removeAttribute('src');player.load();
+        $('media-title').textContent='No track selected';$('media-subtitle').textContent='Choose music from your library.';
+        document.querySelector('.album-art img')?.remove();document.querySelector('.mini-cover').style.backgroundImage='';document.querySelector('.mini-cover').classList.remove('has-art');
+        if(sourceMode==='local'){$('track-title').textContent='No track selected';$('track-subtitle').textContent='Choose music from your library';$('viz-track').textContent='Awaiting playback';$('seek').value=0;$('seek').disabled=true;fill($('seek'));}
+      }
+      const index=tracks.indexOf(track);if(index>=0)tracks.splice(index,1);
+      tracks.forEach(t=>{if(t.savedOnboardId===track.id)delete t.savedOnboardId;});
+      if(track.artwork)URL.revokeObjectURL(track.artwork);
+      trackIndex=wasSelected?-1:selected?tracks.indexOf(selected):-1;
+      deleteTarget=null;$('delete-music-dialog').close();
+      const onboard=tracks.filter(t=>t.origin==='onboard').length,usb=tracks.filter(t=>t.origin==='usb').length;
+      $('usb-status').textContent=`${onboard} onboard · ${usb} USB tracks`;
+      toast('Saved copy deleted from the Pi.');
+    }catch(error){$('delete-music-error').textContent=error.message||'Could not delete this file.';$('delete-music-error').hidden=false;}
+    finally{deletingTrack=false;$('confirm-delete-music').disabled=false;$('cancel-delete-music').disabled=false;$('confirm-delete-music').textContent='Delete file';renderLibrary();renderSaveButton();}
+  };
   function showTrackMetadata(t){
-    $('track-title').textContent=t.title;$('media-title').textContent=t.title;$('viz-track').textContent=t.title;
-    $('track-subtitle').textContent=`${t.artist} · ${t.format}`;
+    if(sourceMode==='local'){$('track-title').textContent=t.title;$('viz-track').textContent=t.title;}
+    $('media-title').textContent=t.title;
+    if(sourceMode==='local')$('track-subtitle').textContent=`${t.artist} · ${t.format}`;
     $('media-subtitle').textContent=t.album?`${t.artist} · ${t.album}`:'Local file · stereo DSP enabled';
     const art=document.querySelector('.album-art');art.querySelector('img')?.remove();
     const cover=document.querySelector('.mini-cover');cover.style.backgroundImage=t.artwork?`url("${t.artwork}")`:'';cover.classList.toggle('has-art',!!t.artwork);
     if(t.artwork){const img=document.createElement('img');img.src=t.artwork;img.alt=t.album?`${t.album} cover`:'Embedded album artwork';art.append(img);}
     renderSaveButton();
   }
-  async function loadTrack(i,play=false){if(!tracks[i])return;trackIndex=i;const t=tracks[i];player.src=t.url;showTrackMetadata(t);$('seek').value=0;$('seek').disabled=true;fill($('seek'));renderLibrary();
+  async function loadTrack(i,play=false){if(!tracks[i])return;useLocal();trackIndex=i;const t=tracks[i];player.src=t.url;showTrackMetadata(t);$('seek').value=0;$('seek').disabled=true;fill($('seek'));renderLibrary();
     if(!t.metadataRead){t.metadataRead=true;const metadataFile=t.file?Promise.resolve(t.file):fetch(t.metadata_url,{headers:{Range:'bytes=0-4194303'}}).then(response=>{if(!response.ok)throw new Error('Metadata unavailable');return response.blob();});metadataFile.then(file=>CivicMetadata(file)).then(meta=>{Object.assign(t,meta);if(tracks[trackIndex]===t)showTrackMetadata(t);renderLibrary();}).catch(()=>{});}
     if(play)await playTrack();}
   async function playTrack(){if(!tracks.length){chooseFiles();return;}if(trackIndex<0){await loadTrack(0,false);}try{await ensureAudio();await player.play();}catch(error){toast(error.name==='NotSupportedError'?'This audio format is not supported by this browser. Try FLAC, WAV or MP3.':'Playback could not start. Choose a supported local track and press play.');}}
@@ -353,11 +741,11 @@ window.CivicMetadata = async function(file) {
       const rect=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5),w=rect.width,h=rect.height;
       if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-      const playing=!!graph&&!player.paused;
+      const playing=!!graph&&(sourceMode==='bluetooth'?bluetooth.playing:!player.paused);
       if(graph){graph.analyser.getByteFrequencyData(spectrum);graph.analyser.getByteTimeDomainData(wave);}else{wave.fill(128);spectrum.fill(0);}
       let rms=0;wave.forEach(value=>rms+=((value-128)/128)**2);rms=Math.sqrt(rms/wave.length);
       const db=20*Math.log10(Math.max(rms,1e-5));
-      $('viz-status').textContent=playing?'LIVE · POST-DSP':tracks.length?'Playback paused':'Play a local track to begin';
+      $('viz-status').textContent=playing?`LIVE · ${sourceMode==='bluetooth'?'BLUETOOTH · ':''}POST-DSP`:sourceMode==='bluetooth'?'Waiting for Bluetooth playback':tracks.length?'Playback paused':'Choose local or Bluetooth audio';
       $('viz-status').classList.toggle('is-live',playing);
       $('viz-level').textContent=playing?`${db<-90?'−∞':db.toFixed(1)} dBFS RMS`:'POST-DSP AUDIO';
       const energy=f=>{if(!graph||!playing)return 0;const bin=Math.min(spectrum.length-1,Math.max(0,Math.round(f/(graph.ctx.sampleRate/2)*spectrum.length)));return spectrum[bin]/255;};
@@ -385,9 +773,11 @@ window.CivicMetadata = async function(file) {
     }draw();
   }
   $('fullscreen-btn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('Full screen is unavailable in this preview. Use Chromium kiosk mode on the Pi.');}};
-  const help={bluetooth:['Bluetooth receiver','Configure the Pi as an A2DP audio receiver with BlueZ and PipeWire. Pair the iPhone 15 with CivicPi, then route the incoming stream through a system DSP sink to HDMI. Spotify continues playing on the phone. Pairing, AVRCP controls, metadata and reconnect behavior still need Pi-side implementation.'],spotify:['Spotify Connect','Install and validate a compatible Spotify Connect receiver for Raspberry Pi OS. The Pi needs internet access and device discovery must work on the chosen network. Control playback from the Spotify app on the iPhone. Receiver account requirements vary. Route its output through the same system DSP and HDMI path.'],usb:['Wired iPhone audio','A normal USB-C charging/data cable is not a verified generic audio input into a Pi. One possible wired path is an iPhone-compatible USB-C audio DAC feeding a Pi-compatible USB audio capture interface. That adds hardware and an analog conversion; exact compatibility and charging need verification before purchase. Bluetooth is the planned first implementation.']};
+  const help={bluetooth:['Bluetooth receiver','Pair your iPhone with CivicPi in Bluetooth settings, then select Use Bluetooth here. Incoming audio enters the same EQ, source-band trims, stereo matrix, compressor and post-DSP visualizer as local music. Keep this dashboard open; control playback on the iPhone.'],spotify:['Spotify Connect','Install and validate a compatible Spotify Connect receiver for Raspberry Pi OS. The Pi needs internet access and device discovery must work on the chosen network. Control playback from the Spotify app on the iPhone. Receiver account requirements vary. Route its output through the same system DSP and HDMI path.'],usb:['Wired iPhone audio','A normal USB-C charging/data cable is not a verified generic audio input into a Pi. One possible wired path is an iPhone-compatible USB-C audio DAC feeding a Pi-compatible USB audio capture interface. That adds hardware and an analog conversion; exact compatibility and charging need verification before purchase. Bluetooth is available through the Pi audio bridge.']};
   all('[data-help]').forEach(b=>b.onclick=()=>{const [title,body]=help[b.dataset.help];$('help-title').textContent=title;$('help-body').textContent=body;$('help-dialog').showModal();});$('close-help').onclick=()=>$('help-dialog').close();
   window.addEventListener('beforeunload',()=>tracks.forEach(t=>{if(t.origin==='local')URL.revokeObjectURL(t.url);if(t.artwork)URL.revokeObjectURL(t.artwork);}));
+  window.CivicAudio={getGraph:()=>graph,ensure:ensureAudio};
   showTab('speakers');renderSpeaker();refreshEQ();renderStage();renderVolume();renderLibrary();renderSaveButton();all('input.range').forEach(fill);
+  if(location.hash)showPage(location.hash.slice(1));
 })();
 </script></body></html>

@@ -3,7 +3,7 @@
   const $ = id => document.getElementById(id);
   const all = selector => [...document.querySelectorAll(selector)];
   const clamp = (value, min, max, fallback = 0) => Number.isFinite(Number(value)) ? Math.min(max, Math.max(min, Number(value))) : fallback;
-  const frequencies = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+  const frequencies = CivicDSP.frequencies;
   const frequencyLabel = f => f >= 1000 ? `${f / 1000}k` : `${f}`;
   const speakers = [
     {id:'tl',location:'L · Sail panel',position:'FRONT LEFT · SAIL PANEL',brand:'Rockford Fosgate',model:'P165-SI',size:'1″ tweeter',detail:'P165-SI · 1″ PEI tweeter',side:'L',band:'high',key:'highL'},
@@ -27,8 +27,10 @@
   } catch { /* Browser storage may be unavailable; use session defaults. */ }
   let selected = speakers[0], selectedEQ = 17, audition = false, muted = false, graph = null;
   let toastTimer, vizMode = 'spectrum', vizFrame = null, currentPage = 'sound', shuffle = false, repeat = false;
+  let sourceMode = 'local', bluetoothStarting = false, restoreBluetooth = false, sourceChoiceResolved = false;
+  try{restoreBluetooth=localStorage.getItem('civic-audio-source')==='bluetooth';}catch{}
   const cutRestore = {};
-  const player = $('audio-player'), tracks = []; let trackIndex = -1, usbScanned = false, savingTrack = false;
+  const player = $('audio-player'), tracks = []; let trackIndex = -1, usbScanned = false, savingTrack = false, deletingTrack = false, deleteTarget = null;
   const icon = name => `<svg aria-hidden="true"><use href="#${name}-icon"/></svg>`;
   function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('visible'),4200); }
   function dirty() { $('profile-status').textContent = 'Save tuning'; }
@@ -40,6 +42,8 @@
     all('.nav-btn').forEach(b => {const active = b.dataset.page === id || (['phone','visualizer'].includes(id) && b.dataset.page === 'apps'); b.classList.toggle('active',active); active ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current');});
     const titles = {sound:'Sound studio',home:'Overview',music:'Your music',phone:'Phone audio',lights:'Cabin lighting',vehicle:'Vehicle diagnostics',apps:'Applications',visualizer:'Visualizer'};
     $('page-title').textContent = titles[id];
+    window.CivicDiagnostics?.setVisible(id==='vehicle');
+    window.CivicLights?.setVisible(id==='lights');
     if (id === 'visualizer') startVisualizer(); else {cancelAnimationFrame(vizFrame); vizFrame = null;}
     if (id === 'music' && !usbScanned) {usbScanned = true; scanUSB(false);}
   }
@@ -98,10 +102,10 @@
   $('stereo-width').oninput=e=>{state.width=Number(e.target.value);dirty();renderStage();updateDSP();};$('balance').oninput=e=>{state.balance=Number(e.target.value);dirty();renderStage();updateDSP();};
   $('width-reset').onclick=()=>{state.width=100;dirty();renderStage();updateDSP();};$('balance-reset').onclick=()=>{state.balance=0;dirty();renderStage();updateDSP();};
   $('save-profile').onclick=()=>{try{localStorage.setItem('civic-sound-v1',JSON.stringify(state));$('profile-status').textContent='Tuning saved';toast('Tuning saved on this device.');}catch{toast('Browser storage is unavailable. Tuning will last for this session.');}};
-  // Only browser-local media enters this graph. Bluetooth requires a later PipeWire backend.
+  // Local media and Bluetooth PCM enter the same graph, before headroom/EQ.
   async function ensureAudio(){
-    if(graph){await graph.ctx.resume();return;}
-    const ctx=new AudioContext();const source=ctx.createMediaElementSource(player),headroom=ctx.createGain();headroom.gain.value=10**(-12/20);headroom.channelCount=2;headroom.channelCountMode='explicit';source.connect(headroom);
+    if(graph){await resumeAudio(graph.ctx);return;}
+    const ctx=new AudioContext({sampleRate:48000,latencyHint:'interactive'});const source=ctx.createMediaElementSource(player),localGain=ctx.createGain(),headroom=ctx.createGain();headroom.gain.value=0;headroom.channelCount=2;headroom.channelCountMode='explicit';source.connect(localGain);localGain.connect(headroom);
     let tail=headroom;const eq=frequencies.map(f=>{const node=ctx.createBiquadFilter();node.type='peaking';node.frequency.value=Math.min(f,ctx.sampleRate*.499);node.Q.value=4.318;tail.connect(node);tail=node;return node;});
     const split=ctx.createChannelSplitter(2),merge=ctx.createChannelMerger(2);tail.connect(split);
     // Mid/side matrix: L'=(1+w)L/2+(1-w)R/2, R'=(1-w)L/2+(1+w)R/2.
@@ -112,12 +116,82 @@
       return {...bands,level};
     });
     const guard=ctx.createDynamicsCompressor();guard.threshold.value=-1;guard.knee.value=0;guard.ratio.value=20;guard.attack.value=.003;guard.release.value=.1;
-    const volume=ctx.createGain(),analyser=ctx.createAnalyser();analyser.fftSize=2048;merge.connect(guard);guard.connect(volume);volume.connect(analyser);analyser.connect(ctx.destination);
-    graph={ctx,eq,matrix,channels,volume,analyser};updateDSP();await ctx.resume();
+    // Cancel Chromium's automatic compressor makeup gain for this hard-knee curve.
+    // The guard remains active, without adding gain below its threshold.
+    const guardUnity=ctx.createGain();guardUnity.gain.value=10**(.6*guard.threshold.value*(1-1/guard.ratio.value)/20);
+    const volume=ctx.createGain(),analyser=ctx.createAnalyser();analyser.fftSize=2048;merge.connect(guard);guard.connect(guardUnity);guardUnity.connect(volume);volume.connect(analyser);analyser.connect(ctx.destination);
+    graph={ctx,eq,matrix,channels,volume,analyser,input:headroom,headroom,localGain};updateDSP();await resumeAudio(ctx);
   }
-  function ramp(param,value){param.setTargetAtTime(value,graph.ctx.currentTime,.02);}
+  async function resumeAudio(ctx){
+    await Promise.race([ctx.resume(),new Promise(resolve=>setTimeout(resolve,1200))]);
+    if(ctx.state!=='running')throw new Error('Tap Use Bluetooth to enable audio.');
+  }
+  const bluetooth=new CivicBluetooth(info=>{
+    if(!sourceChoiceResolved&&typeof info.enabled==='boolean'){
+      sourceChoiceResolved=true;
+      if(info.preferred_source==='bluetooth')restoreBluetooth=true;
+      if(info.preferred_source==='local')restoreBluetooth=false;
+    }
+    const selected=info.selected;
+    $('bluetooth-state').textContent=info.error||(!info.enabled?'Bluetooth bridge not enabled':!info.ready?'Preparing Pi audio…':!info.connected?'Waiting for your iPhone':selected&&info.active?info.playing?'Bluetooth · DSP active':'Connected · playback paused':'iPhone connected · select Use Bluetooth');
+    $('bluetooth-badge').textContent=info.connected?(info.active?'DSP active':'iPhone connected'):'Not connected';
+    $('bluetooth-state').classList.toggle('is-live',selected&&info.active);
+    $('use-bluetooth').disabled=bluetoothStarting||!info.ready;
+    $('use-bluetooth').textContent=bluetoothStarting?'Starting…':selected?'Reconnect Bluetooth':'Use Bluetooth';
+    $('use-local').classList.toggle('active',!selected);
+    $('output-source').textContent=selected?'BLUETOOTH':'LOCAL';
+    if(selected){$('track-title').textContent='Bluetooth audio';$('track-subtitle').textContent='iPhone · 31-band EQ + DSP';$('viz-track').textContent='iPhone · Bluetooth';}
+    ['play','next','previous','shuffle','repeat'].forEach(id=>{$(id).disabled=selected;$(id).title=selected?'Use playback controls on your iPhone':'';});
+    if(selected){$('seek').disabled=true;$('seek').value=0;fill($('seek'));$('elapsed').textContent='LIVE';$('duration').textContent='—';}
+    if(restoreBluetooth&&info.ready){restoreBluetooth=false;useBluetooth();}
+  });
+  function rememberSource(source){
+    try{localStorage.setItem('civic-audio-source',source);}catch{}
+    if(location.protocol==='file:')return;
+    fetch('/api/bluetooth/source',{method:'POST',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify({source})})
+      .then(response=>{if(!response.ok)throw new Error();})
+      .catch(()=>toast('Audio source changed, but it could not be saved for startup.'));
+  }
+  async function useBluetooth(){
+    if(bluetoothStarting)return;bluetoothStarting=true;$('use-bluetooth').disabled=true;
+    try{
+      await ensureAudio();player.pause();
+      await bluetooth.start(graph.ctx,graph.input);
+      graph.localGain.gain.value=0;sourceMode='bluetooth';
+      rememberSource('bluetooth');
+      $('play').classList.remove('playing');$('play').innerHTML=icon('play');
+      toast('Bluetooth now uses the EQ, source-band trims, sound stage and visualizer.');
+    }catch(error){bluetooth.stop();sourceMode='local';if(graph)graph.localGain.gain.value=1;toast(error.message||'Bluetooth audio could not start.');}
+    finally{bluetoothStarting=false;bluetooth.notify();}
+  }
+  function useLocal(){
+    restoreBluetooth=false;bluetooth.stop();sourceMode='local';if(graph)graph.localGain.gain.value=1;
+    rememberSource('local');
+    if(tracks[trackIndex])showTrackMetadata(tracks[trackIndex]);
+    else{$('track-title').textContent='No track selected';$('track-subtitle').textContent='Choose USB or onboard music';$('viz-track').textContent='Awaiting playback';}
+    $('seek').disabled=!Number.isFinite(player.duration)||player.duration<=0;
+    $('elapsed').textContent=timeLabel(player.currentTime);$('duration').textContent=timeLabel(player.duration);
+  }
+  $('use-bluetooth').onclick=useBluetooth;$('use-local').onclick=useLocal;
+  function ramp(param,value){const now=graph.ctx.currentTime;param.cancelAndHoldAtTime(now);param.setTargetAtTime(value,now,.02);}
+  function updateEQHeadroom(){
+    const gains=state.eq.map(gain=>state.bypass?0:gain),key=gains.join(',');
+    if(graph.eqKey===key)return;
+    const result=CivicDSP.eqHeadroom(gains,graph.ctx.sampleRate);
+    // Reserve for overlapping old/new filters while a preset or band changes.
+    const previous=(graph.ctx.currentTime<(graph.eqHoldUntil||0)?graph.eqEnvelope:graph.eqGains)||Array(31).fill(0);
+    const envelope=gains.map((gain,i)=>Math.max(gain,previous[i]));
+    const transition=CivicDSP.eqHeadroom(envelope,graph.ctx.sampleRate);
+    const now=graph.ctx.currentTime,param=graph.headroom.gain;
+    param.cancelAndHoldAtTime(now);
+    param.setTargetAtTime(Math.min(param.value,transition.gain),now,.003);
+    param.setTargetAtTime(result.gain,now+.2,.15);
+    graph.eq.forEach((node,i)=>{node.gain.cancelAndHoldAtTime(now);node.gain.setTargetAtTime(gains[i],now+.02,.02);});
+    graph.eqGains=gains;graph.eqEnvelope=envelope;graph.eqHoldUntil=now+.25;graph.eqKey=key;
+    $('eq-headroom').textContent=`Auto headroom: ${result.attenuationDB?`−${result.attenuationDB.toFixed(1)}`:'0.0'} dB · peak guard`;
+  }
   function updateDSP(){if(!graph)return;const w=state.width/100;const norm=Math.max(1,w);[ (1+w)/2,(1-w)/2,(1-w)/2,(1+w)/2 ].forEach((value,i)=>ramp(graph.matrix[i].gain,value/norm));
-    graph.eq.forEach((node,i)=>ramp(node.gain,state.bypass?0:state.eq[i]));
+    updateEQHeadroom();
     graph.channels.forEach((c,i)=>{const side=i?'R':'L';
       ['low','mid','high'].forEach(band=>{const enabled=!audition||selected.band==='full'||selected.band===band;const db=state.gains[band==='low'?'low':`${band}${side}`];ramp(c[band].gain,enabled?(band==='mid'?-1:1)*10**(db/20):0);});
       const balance=state.balance/100;let gain=10**(state.gains[`full${side}`]/20)*(i===0?1-Math.max(0,balance):1+Math.min(0,balance));
@@ -129,7 +203,7 @@
   function chooseFiles(){$('music-files').click();} all('.choose-files').forEach(b=>b.onclick=chooseFiles);
   function renderLibrary(){const list=$('track-list');list.replaceChildren();const query=$('library-search').value.toLowerCase();$('track-count').textContent=`${tracks.length} ${tracks.length===1?'track':'tracks'}`;
     if(!tracks.length){list.innerHTML=`<div class="empty-library">${icon('music')}<h3>No music loaded</h3><p>Add MP3, FLAC, WAV or other browser-supported audio.</p><button class="outline-btn choose-files">Choose music</button></div>`;list.querySelector('button').onclick=chooseFiles;return;}
-    tracks.forEach((track,i)=>{if(!`${track.title} ${track.artist}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.className=`track-row${i===trackIndex?' active':''}`;const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=track.title;const ext=document.createElement('small');ext.textContent=`${track.format} · ${track.origin==='onboard'?'PI':track.origin==='usb'?'USB':'LOCAL'}`;b.append(n,title,ext);b.onclick=()=>loadTrack(i,true);list.append(b);});if(!list.childElementCount){const p=document.createElement('p');p.className='system-note';p.textContent='No matching tracks.';list.append(p);}
+    tracks.forEach((track,i)=>{if(!`${track.title} ${track.artist}`.toLowerCase().includes(query))return;const b=document.createElement('button');b.className=`track-row${i===trackIndex?' active':''}`;if(track.id)b.dataset.trackId=track.id;const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=track.title;const ext=document.createElement('small');ext.textContent=`${track.format} · ${track.origin==='onboard'?'PI':track.origin==='usb'?'USB':'LOCAL'}`;b.append(n,title,ext);b.onclick=()=>loadTrack(i,true);const row=document.createElement('div');row.className='track-entry';row.append(b);if(track.origin==='onboard'&&track.delete_token){const remove=document.createElement('button');remove.className='delete-track';remove.textContent='Delete';remove.setAttribute('aria-label',`Delete ${track.title} from Pi`);remove.disabled=savingTrack||deletingTrack;remove.onclick=()=>confirmDeleteTrack(track);row.append(remove);}list.append(row);});if(!list.childElementCount){const p=document.createElement('p');p.className='system-note';p.textContent='No matching tracks.';list.append(p);}
   }
   $('library-search').oninput=renderLibrary;
   $('music-files').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const first=tracks.length;files.forEach(file=>tracks.push({file,origin:'local',format:file.name.split('.').pop().toUpperCase(),url:URL.createObjectURL(file),title:file.name.replace(/\.[^.]+$/,''),artist:'Local audio'}));renderLibrary();e.target.value='';await loadTrack(first,true);};
@@ -139,7 +213,7 @@
       const response=await fetch('/api/library',{cache:'no-store'});if(!response.ok)throw new Error(response.status===409?'A USB scan is already running. Try again shortly.':'USB scanning requires the Flask backend.');
       const data=await response.json();if(!Array.isArray(data.tracks))throw new Error('Invalid USB library response.');
       const previous=tracks[trackIndex],old=new Map(tracks.filter(t=>t.origin!=='local').map(t=>[t.id,t]));
-      const indexed=data.tracks.map(t=>old.get(t.id)||{...t,origin:t.origin||'usb'}),local=tracks.filter(t=>t.origin==='local');
+      const indexed=data.tracks.map(t=>{const prior=old.get(t.id);return prior&&prior.delete_token===t.delete_token?prior:{...t,origin:t.origin||'usb'};}),local=tracks.filter(t=>t.origin==='local');
       const retained=new Set(indexed.map(t=>t.id));old.forEach(t=>{if(!retained.has(t.id)&&t.artwork)URL.revokeObjectURL(t.artwork);});
       tracks.splice(0,tracks.length,...local,...indexed);trackIndex=previous?tracks.indexOf(previous):-1;
       if(previous&&trackIndex<0){player.pause();player.removeAttribute('src');player.load();$('track-title').textContent='Music file unavailable';$('track-subtitle').textContent='Check your storage and scan again';}
@@ -152,7 +226,7 @@
   $('scan-usb').onclick=()=>scanUSB();
   function renderSaveButton(){
     const track=tracks[trackIndex],saved=track?.origin==='onboard'||!!track?.savedOnboardId;
-    $('save-onboard').disabled=savingTrack||!track||saved||location.protocol==='file:';
+    $('save-onboard').disabled=savingTrack||deletingTrack||!track||saved||location.protocol==='file:';
     $('save-onboard').textContent=savingTrack?'Saving…':saved?'Saved on Pi':'Save to Pi';
     $('save-onboard').classList.toggle('is-saved',saved);
     $('storage-caption').textContent=track?.origin==='onboard'?'Stored onboard · USB drive not needed':saved?'An onboard copy is saved':track?.origin==='usb'?'Playing from USB · save a copy to keep it onboard':track?'Playing from this device · not yet stored on the Pi':'Save your tracks for playback without a USB drive';
@@ -175,16 +249,53 @@
     }catch(error){toast(error.message||'Could not save this track. Check onboard storage and try again.');}
     finally{savingTrack=false;renderSaveButton();renderLibrary();}
   };
+  function confirmDeleteTrack(track){
+    if(deletingTrack||savingTrack||track.origin!=='onboard'||!track.delete_token)return;
+    deleteTarget={track,token:track.delete_token};
+    $('delete-music-name').textContent=track.title;
+    $('delete-music-playing').hidden=tracks[trackIndex]!==track||sourceMode!=='local'||player.paused;
+    $('delete-music-error').hidden=true;
+    $('delete-music-dialog').showModal();
+  }
+  $('cancel-delete-music').onclick=()=>{if(!deletingTrack){deleteTarget=null;$('delete-music-dialog').close();}};
+  $('delete-music-dialog').addEventListener('cancel',event=>{if(deletingTrack)event.preventDefault();else deleteTarget=null;});
+  $('confirm-delete-music').onclick=async()=>{
+    if(deletingTrack||!deleteTarget)return;
+    const {track,token}=deleteTarget;
+    deletingTrack=true;$('confirm-delete-music').disabled=true;$('cancel-delete-music').disabled=true;
+    $('confirm-delete-music').textContent='Deleting…';renderSaveButton();renderLibrary();
+    try{
+      const response=await fetch(`/api/library/${encodeURIComponent(track.id)}`,{method:'DELETE',headers:{'Content-Type':'application/json','X-Civic-Request':'1'},body:JSON.stringify({confirm:true,delete_token:token})});
+      const result=await response.json();if(!response.ok||result.deleted!==true)throw new Error(result.error||'Could not delete this file.');
+      const selected=tracks[trackIndex],wasSelected=selected===track;
+      if(wasSelected){
+        player.pause();player.removeAttribute('src');player.load();
+        $('media-title').textContent='No track selected';$('media-subtitle').textContent='Choose music from your library.';
+        document.querySelector('.album-art img')?.remove();document.querySelector('.mini-cover').style.backgroundImage='';document.querySelector('.mini-cover').classList.remove('has-art');
+        if(sourceMode==='local'){$('track-title').textContent='No track selected';$('track-subtitle').textContent='Choose music from your library';$('viz-track').textContent='Awaiting playback';$('seek').value=0;$('seek').disabled=true;fill($('seek'));}
+      }
+      const index=tracks.indexOf(track);if(index>=0)tracks.splice(index,1);
+      tracks.forEach(t=>{if(t.savedOnboardId===track.id)delete t.savedOnboardId;});
+      if(track.artwork)URL.revokeObjectURL(track.artwork);
+      trackIndex=wasSelected?-1:selected?tracks.indexOf(selected):-1;
+      deleteTarget=null;$('delete-music-dialog').close();
+      const onboard=tracks.filter(t=>t.origin==='onboard').length,usb=tracks.filter(t=>t.origin==='usb').length;
+      $('usb-status').textContent=`${onboard} onboard · ${usb} USB tracks`;
+      toast('Saved copy deleted from the Pi.');
+    }catch(error){$('delete-music-error').textContent=error.message||'Could not delete this file.';$('delete-music-error').hidden=false;}
+    finally{deletingTrack=false;$('confirm-delete-music').disabled=false;$('cancel-delete-music').disabled=false;$('confirm-delete-music').textContent='Delete file';renderLibrary();renderSaveButton();}
+  };
   function showTrackMetadata(t){
-    $('track-title').textContent=t.title;$('media-title').textContent=t.title;$('viz-track').textContent=t.title;
-    $('track-subtitle').textContent=`${t.artist} · ${t.format}`;
+    if(sourceMode==='local'){$('track-title').textContent=t.title;$('viz-track').textContent=t.title;}
+    $('media-title').textContent=t.title;
+    if(sourceMode==='local')$('track-subtitle').textContent=`${t.artist} · ${t.format}`;
     $('media-subtitle').textContent=t.album?`${t.artist} · ${t.album}`:'Local file · stereo DSP enabled';
     const art=document.querySelector('.album-art');art.querySelector('img')?.remove();
     const cover=document.querySelector('.mini-cover');cover.style.backgroundImage=t.artwork?`url("${t.artwork}")`:'';cover.classList.toggle('has-art',!!t.artwork);
     if(t.artwork){const img=document.createElement('img');img.src=t.artwork;img.alt=t.album?`${t.album} cover`:'Embedded album artwork';art.append(img);}
     renderSaveButton();
   }
-  async function loadTrack(i,play=false){if(!tracks[i])return;trackIndex=i;const t=tracks[i];player.src=t.url;showTrackMetadata(t);$('seek').value=0;$('seek').disabled=true;fill($('seek'));renderLibrary();
+  async function loadTrack(i,play=false){if(!tracks[i])return;useLocal();trackIndex=i;const t=tracks[i];player.src=t.url;showTrackMetadata(t);$('seek').value=0;$('seek').disabled=true;fill($('seek'));renderLibrary();
     if(!t.metadataRead){t.metadataRead=true;const metadataFile=t.file?Promise.resolve(t.file):fetch(t.metadata_url,{headers:{Range:'bytes=0-4194303'}}).then(response=>{if(!response.ok)throw new Error('Metadata unavailable');return response.blob();});metadataFile.then(file=>CivicMetadata(file)).then(meta=>{Object.assign(t,meta);if(tracks[trackIndex]===t)showTrackMetadata(t);renderLibrary();}).catch(()=>{});}
     if(play)await playTrack();}
   async function playTrack(){if(!tracks.length){chooseFiles();return;}if(trackIndex<0){await loadTrack(0,false);}try{await ensureAudio();await player.play();}catch(error){toast(error.name==='NotSupportedError'?'This audio format is not supported by this browser. Try FLAC, WAV or MP3.':'Playback could not start. Choose a supported local track and press play.');}}
@@ -208,11 +319,11 @@
       const rect=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5),w=rect.width,h=rect.height;
       if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-      const playing=!!graph&&!player.paused;
+      const playing=!!graph&&(sourceMode==='bluetooth'?bluetooth.playing:!player.paused);
       if(graph){graph.analyser.getByteFrequencyData(spectrum);graph.analyser.getByteTimeDomainData(wave);}else{wave.fill(128);spectrum.fill(0);}
       let rms=0;wave.forEach(value=>rms+=((value-128)/128)**2);rms=Math.sqrt(rms/wave.length);
       const db=20*Math.log10(Math.max(rms,1e-5));
-      $('viz-status').textContent=playing?'LIVE · POST-DSP':tracks.length?'Playback paused':'Play a local track to begin';
+      $('viz-status').textContent=playing?`LIVE · ${sourceMode==='bluetooth'?'BLUETOOTH · ':''}POST-DSP`:sourceMode==='bluetooth'?'Waiting for Bluetooth playback':tracks.length?'Playback paused':'Choose local or Bluetooth audio';
       $('viz-status').classList.toggle('is-live',playing);
       $('viz-level').textContent=playing?`${db<-90?'−∞':db.toFixed(1)} dBFS RMS`:'POST-DSP AUDIO';
       const energy=f=>{if(!graph||!playing)return 0;const bin=Math.min(spectrum.length-1,Math.max(0,Math.round(f/(graph.ctx.sampleRate/2)*spectrum.length)));return spectrum[bin]/255;};
@@ -240,8 +351,10 @@
     }draw();
   }
   $('fullscreen-btn').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('Full screen is unavailable in this preview. Use Chromium kiosk mode on the Pi.');}};
-  const help={bluetooth:['Bluetooth receiver','Configure the Pi as an A2DP audio receiver with BlueZ and PipeWire. Pair the iPhone 15 with CivicPi, then route the incoming stream through a system DSP sink to HDMI. Spotify continues playing on the phone. Pairing, AVRCP controls, metadata and reconnect behavior still need Pi-side implementation.'],spotify:['Spotify Connect','Install and validate a compatible Spotify Connect receiver for Raspberry Pi OS. The Pi needs internet access and device discovery must work on the chosen network. Control playback from the Spotify app on the iPhone. Receiver account requirements vary. Route its output through the same system DSP and HDMI path.'],usb:['Wired iPhone audio','A normal USB-C charging/data cable is not a verified generic audio input into a Pi. One possible wired path is an iPhone-compatible USB-C audio DAC feeding a Pi-compatible USB audio capture interface. That adds hardware and an analog conversion; exact compatibility and charging need verification before purchase. Bluetooth is the planned first implementation.']};
+  const help={bluetooth:['Bluetooth receiver','Pair your iPhone with CivicPi in Bluetooth settings, then select Use Bluetooth here. Incoming audio enters the same EQ, source-band trims, stereo matrix, compressor and post-DSP visualizer as local music. Keep this dashboard open; control playback on the iPhone.'],spotify:['Spotify Connect','Install and validate a compatible Spotify Connect receiver for Raspberry Pi OS. The Pi needs internet access and device discovery must work on the chosen network. Control playback from the Spotify app on the iPhone. Receiver account requirements vary. Route its output through the same system DSP and HDMI path.'],usb:['Wired iPhone audio','A normal USB-C charging/data cable is not a verified generic audio input into a Pi. One possible wired path is an iPhone-compatible USB-C audio DAC feeding a Pi-compatible USB audio capture interface. That adds hardware and an analog conversion; exact compatibility and charging need verification before purchase. Bluetooth is available through the Pi audio bridge.']};
   all('[data-help]').forEach(b=>b.onclick=()=>{const [title,body]=help[b.dataset.help];$('help-title').textContent=title;$('help-body').textContent=body;$('help-dialog').showModal();});$('close-help').onclick=()=>$('help-dialog').close();
   window.addEventListener('beforeunload',()=>tracks.forEach(t=>{if(t.origin==='local')URL.revokeObjectURL(t.url);if(t.artwork)URL.revokeObjectURL(t.artwork);}));
+  window.CivicAudio={getGraph:()=>graph,ensure:ensureAudio};
   showTab('speakers');renderSpeaker();refreshEQ();renderStage();renderVolume();renderLibrary();renderSaveButton();all('input.range').forEach(fill);
+  if(location.hash)showPage(location.hash.slice(1));
 })();

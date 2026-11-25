@@ -146,6 +146,80 @@ class LibraryTests(unittest.TestCase):
         self.assertFalse(list(dashboard.onboard_root().rglob('*.flac')))
         self.assertFalse(list(dashboard.onboard_root().glob('.import-*')))
 
+    def saved_fixture(self, filename='saved.flac'):
+        response = self.client.post('/api/library/import',
+            data={'file': (io.BytesIO(b'fLaC-fixture-original'), filename)},
+            headers={'X-Civic-Request':'1'})
+        self.assertEqual(response.status_code,201)
+        track = response.json['track']
+        return track, dashboard._library[track['id']]
+
+    def delete_saved(self, track, **kwargs):
+        return self.client.delete('/api/library/'+track['id'],
+            json={'confirm':True,'delete_token':track['delete_token']},
+            headers={'X-Civic-Request':'1'}, **kwargs)
+
+    def test_delete_saved_copy_preserves_original_usb_and_other_music(self):
+        original = self.root/'original.flac';original.write_bytes(b'fLaC-fixture-original')
+        other = self.root/'other.flac';other.write_bytes(b'fLaC-other')
+        self.client.get('/api/library')
+        saved, path = self.saved_fixture()
+        response = self.delete_saved(saved)
+        self.assertEqual(response.status_code,200)
+        self.assertTrue(response.json['deleted'])
+        self.assertFalse(path.exists())
+        self.assertEqual(original.read_bytes(),b'fLaC-fixture-original')
+        self.assertEqual(other.read_bytes(),b'fLaC-other')
+        self.assertEqual(self.client.get(saved['url']).status_code,404)
+        tracks = self.client.get('/api/library').json['tracks']
+        self.assertEqual(len(tracks),2)
+        self.assertTrue(all(t['origin']=='usb' for t in tracks))
+        # The content can be saved again after its local copy was deleted.
+        again, path = self.saved_fixture()
+        self.assertTrue(path.is_file())
+
+    def test_delete_requires_local_confirmation_and_indexed_onboard_file(self):
+        saved,path = self.saved_fixture()
+        url='/api/library/'+saved['id']
+        self.assertEqual(self.client.delete(url).status_code,403)
+        self.assertEqual(self.client.delete(url,json={'confirm':True,'delete_token':saved['delete_token']},headers={'X-Civic-Request':'1'},environ_overrides={'REMOTE_ADDR':'192.168.1.9'}).status_code,403)
+        for payload in [None,{}, {'confirm':False,'delete_token':saved['delete_token']}, {'confirm':True}]:
+            self.assertEqual(self.client.delete(url,json=payload,headers={'X-Civic-Request':'1'}).status_code,400)
+        self.assertTrue(path.is_file())
+        usb=self.root/'usb.flac';usb.write_bytes(b'fLaC-USB-original')
+        indexed=self.client.get('/api/library').json['tracks']
+        external=next(t for t in indexed if t['origin']=='usb')
+        self.assertEqual(self.client.delete('/api/library/'+external['id'],json={'confirm':True,'delete_token':'fake'},headers={'X-Civic-Request':'1'}).status_code,403)
+        self.assertEqual(usb.read_bytes(),b'fLaC-USB-original')
+        self.assertEqual(self.client.delete('/api/library/unknown',json={'confirm':True,'delete_token':'fake'},headers={'X-Civic-Request':'1'}).status_code,404)
+
+    def test_delete_rejects_replaced_file_and_symlink_escapes(self):
+        saved,path=self.saved_fixture()
+        path.write_bytes(b'fLaC-new-file-with-different-content')
+        self.assertEqual(self.delete_saved(saved).status_code,409)
+        self.assertEqual(path.read_bytes(),b'fLaC-new-file-with-different-content')
+        outside=self.root/'usb-original.flac';outside.write_bytes(b'fLaC-preserve-source')
+        path.unlink();path.symlink_to(outside)
+        self.assertEqual(self.delete_saved(saved).status_code,409)
+        self.assertEqual(outside.read_bytes(),b'fLaC-preserve-source')
+        path.unlink();path.write_bytes(b'fLaC-fixture-original')
+        fresh=dashboard.describe_track(path)
+        folder=path.parent;renamed=folder.with_name(folder.name+'-moved');folder.rename(renamed)
+        external=self.root/'usb-folder';external.mkdir();(external/path.name).write_bytes(b'fLaC-external')
+        folder.symlink_to(external,target_is_directory=True)
+        self.assertEqual(self.delete_saved(fresh).status_code,409)
+        self.assertEqual((external/path.name).read_bytes(),b'fLaC-external')
+        self.assertEqual((renamed/path.name).read_bytes(),b'fLaC-fixture-original')
+
+    def test_delete_does_not_race_library_scans_or_imports(self):
+        track,path=self.saved_fixture()
+        for lock in [dashboard._scan_lock,dashboard._import_lock]:
+            lock.acquire()
+            try:self.assertEqual(self.delete_saved(track).status_code,409)
+            finally:lock.release()
+            self.assertTrue(path.is_file())
+        self.assertEqual(self.delete_saved(track).status_code,200)
+
 
 if __name__ == '__main__':
     unittest.main()

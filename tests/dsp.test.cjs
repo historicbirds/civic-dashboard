@@ -21,3 +21,23 @@ for(const sr of [44100,48000,96000]){
 // At zero separation both outputs are identical; at natural width channels do not leak.
 for(const width of [0,1,1.5]){const same=(1+width)/2/Math.max(1,width),cross=(1-width)/2/Math.max(1,width);assert.ok(Math.abs(same)+Math.abs(cross)<=1+1e-12);if(width===0)assert.equal(same,cross);if(width===1)assert.equal(cross,0);}
 console.log('PASS: LR2 unity reconstruction, crossover cutoffs, rolloff, band attenuation and stereo matrix at 44.1/48/96 kHz');
+const {frequencies,peaking,eqHeadroom}=require('../static/js/dsp.js');
+for(const sr of [44100,48000,96000]){
+ const flat=Array(31).fill(0),cuts=Array(31).fill(-12),one=[...flat],overlap=[...flat];
+ one[17]=6;overlap[17]=6;overlap[18]=6;
+ assert.equal(eqHeadroom(flat,sr).gain,1,'Flat EQ must have no fixed attenuation');
+ assert.equal(eqHeadroom(cuts,sr).gain,1,'Cuts must not reserve boost headroom');
+ assert.equal(eqHeadroom(overlap,sr,true).gain,1,'Bypassed EQ must return to unity');
+ assert.ok(Math.abs(eqHeadroom(one,sr).peakDB-6)<1e-7);
+ assert.ok(eqHeadroom(overlap,sr).peakDB>7,'Overlapping filters need more than the largest slider gain');
+ const curves=[one,overlap,Array(31).fill(12),frequencies.map((_,i)=>i%3===0?12:i%3===1?-12:6)];
+ for(const gains of curves){
+  const reserve=eqHeadroom(gains,sr),filters=gains.map((gain,i)=>peaking(frequencies[i],sr,gain));
+  for(let i=0;i<5000;i++){
+   const f=7*(sr*.49997/7)**((i+.37)/5000);
+   const level=filters.reduce((gain,filter)=>gain*magnitude(response(filter,f,sr)),reserve.gain);
+   assert.ok(level<1,`Compensated EQ peak exceeds unity: ${sr} Hz / ${f} Hz / ${level}`);
+  }
+ }
+}
+console.log('PASS: unity flat/cut/bypass EQ, overlapping boosts and compensated dense frequency response');

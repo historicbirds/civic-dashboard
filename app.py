@@ -2,6 +2,7 @@
 import errno
 import hashlib
 import os
+import stat
 import shutil
 import tempfile
 import threading
@@ -12,6 +13,12 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+from audio_bridge import register_audio_bridge
+register_audio_bridge(app)
+from vehicle_diagnostics import register_vehicle_diagnostics
+register_vehicle_diagnostics(app)
+from lighting import register_lighting
+register_lighting(app)
 AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.ogg', '.m4a', '.aac', '.opus', '.aiff', '.aif'}
 MAX_LIBRARY_TRACKS = 10000
 MAX_IMPORT_BYTES = 1024 * 1024 * 1024
@@ -36,10 +43,23 @@ def library_roots():
     return roots
 
 
+def track_version(info):
+    identity = (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+    return hashlib.sha256(repr(identity).encode('ascii')).hexdigest()
+
+
 def describe_track(path):
     track_id = hashlib.sha256(os.fsencode(path)).hexdigest()[:24]
     origin = 'onboard' if path.is_relative_to(onboard_root()) else 'usb'
-    return dict(id=track_id, title=path.stem.replace('_', ' '),
+    token = None
+    if origin == 'onboard':
+        try:
+            info = os.stat(path, follow_symlinks=False)
+            if stat.S_ISREG(info.st_mode):
+                token = track_version(info)
+        except OSError:
+            pass
+    return dict(id=track_id, delete_token=token, title=path.stem.replace('_', ' '),
                 artist='Onboard library' if origin == 'onboard' else 'USB library',
                 album='', origin=origin, format=path.suffix[1:].upper(),
                 url=f'/api/media/{track_id}', metadata_url=f'/api/media/{track_id}')
@@ -244,6 +264,61 @@ def import_music():
         return jsonify(error=message), 507 if error.errno == errno.ENOSPC else 503
     finally:
         _import_lock.release()
+
+
+@app.delete('/api/library/<track_id>')
+def delete_onboard_music(track_id):
+    """Delete one confirmed indexed onboard file; never follow a link to USB."""
+    if request.remote_addr not in ('127.0.0.1', '::1') or request.headers.get('X-Civic-Request') != '1':
+        return jsonify(error='Use Delete from Pi on the dashboard.'), 403
+    payload = request.get_json(silent=True)
+    if not isinstance(payload, dict) or payload.get('confirm') is not True or not isinstance(payload.get('delete_token'), str):
+        return jsonify(error='Confirm the selected saved file before deleting it.'), 400
+    if not _scan_lock.acquire(blocking=False):
+        return jsonify(error='The library is being scanned. Try again shortly.'), 409
+    copying = False
+    descriptors = []
+    try:
+        copying = _import_lock.acquire(blocking=False)
+        if not copying:
+            return jsonify(error='A music copy is running. Try again shortly.'), 409
+        with _library_lock:
+            path = _library.get(track_id)
+        if path is None:
+            return jsonify(error='Track not indexed. Scan the library again.'), 404
+        root = onboard_root()
+        try:
+            relative = path.relative_to(root)
+        except ValueError:
+            return jsonify(error='Only files saved on the Pi can be deleted here.'), 403
+        if not relative.parts or '..' in relative.parts or path.suffix.lower() not in AUDIO_EXTENSIONS:
+            return jsonify(error='Invalid saved music file.'), 403
+        # Pin each parent directory and refuse symlinks. A renamed/replaced parent
+        # cannot redirect unlink to a USB source or another folder outside the library.
+        directory = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        descriptors.append(directory)
+        for part in relative.parts[:-1]:
+            directory = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory)
+            descriptors.append(directory)
+        info = os.stat(relative.name, dir_fd=directory, follow_symlinks=False)
+        if not stat.S_ISREG(info.st_mode):
+            return jsonify(error='This file changed. Scan the library again.'), 409
+        if track_version(info) != payload['delete_token']:
+            return jsonify(error='This file changed. Scan the library and select it again.'), 409
+        os.unlink(relative.name, dir_fd=directory)
+        with _library_lock:
+            _library.pop(track_id, None)
+        return jsonify(deleted=True, track_id=track_id)
+    except FileNotFoundError:
+        return jsonify(error='This saved file is no longer available. Scan the library again.'), 404
+    except OSError:
+        return jsonify(error='Could not delete this file. Check onboard storage and scan again.'), 409
+    finally:
+        for descriptor in reversed(descriptors):
+            os.close(descriptor)
+        if copying:
+            _import_lock.release()
+        _scan_lock.release()
 
 
 @app.errorhandler(RequestEntityTooLarge)
